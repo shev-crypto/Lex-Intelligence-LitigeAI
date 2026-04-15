@@ -93,7 +93,10 @@ export default function Login() {
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
-              <p className="text-xs text-muted-foreground">Min 12 characters with letters, numbers & symbols</p>
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-muted-foreground">Min 12 characters with letters, numbers & symbols</p>
+                <Link to="/forgot-password" className="text-xs text-gold hover:underline">Forgot password?</Link>
+              </div>
             </div>
             <Button type="submit" className="w-full bg-gold text-ink hover:bg-gold/90 font-semibold" disabled={loading}>
               <Mail className="mr-2 h-4 w-4" />

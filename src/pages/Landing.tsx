@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,6 +12,8 @@ import {
   Check,
   ArrowRight,
   ChevronRight,
+  Menu,
+  X,
 } from "lucide-react";
 
 const features = [
@@ -136,6 +139,8 @@ const testimonials = [
 ];
 
 export default function Landing() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-ink text-foreground">
       {/* ─── Navbar ─── */}
@@ -153,7 +158,7 @@ export default function Landing() {
               Testimonials
             </a>
           </nav>
-          <div className="flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3">
             <Link to="/login">
               <Button variant="ghost" className="text-white/80 hover:text-gold hover:bg-white/5">
                 Login
@@ -165,7 +170,40 @@ export default function Landing() {
               </Button>
             </Link>
           </div>
+          {/* Mobile menu button */}
+          <button
+            className="md:hidden text-white/80 hover:text-gold transition-colors"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-white/10 bg-ink/95 backdrop-blur px-6 py-4 space-y-3 animate-fade-in">
+            <a href="#features" className="block text-sm text-white/70 hover:text-gold transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
+              Features
+            </a>
+            <Link to="/pricing" className="block text-sm text-white/70 hover:text-gold transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
+              Pricing
+            </Link>
+            <a href="#testimonials" className="block text-sm text-white/70 hover:text-gold transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
+              Testimonials
+            </a>
+            <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
+              <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="outline" className="w-full border-white/20 text-white/80 hover:text-gold hover:bg-white/5">
+                  Login
+                </Button>
+              </Link>
+              <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
+                <Button className="w-full bg-gold text-ink hover:bg-gold/90 font-semibold">
+                  Start Free Trial
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* ─── Hero ─── */}
@@ -202,15 +240,15 @@ export default function Landing() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link to="/login">
+              <a href="#features">
                 <Button
                   size="lg"
                   variant="outline"
                   className="border-white/30 text-white bg-transparent hover:bg-white/10 hover:text-white hover:border-white/50 text-base px-8 h-12"
                 >
-                  View Live Demo
+                  See How It Works
                 </Button>
-              </Link>
+              </a>
             </div>
 
             {/* Trust bar */}
