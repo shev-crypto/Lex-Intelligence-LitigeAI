@@ -226,21 +226,21 @@ export default function Landing() {
 
           {/* Product preview — mock dashboard */}
           <div className="flex-1 w-full max-w-xl">
-            <div className="rounded-xl border border-white/10 bg-white/[0.03] p-1 shadow-2xl">
-              <div className="rounded-lg bg-ink/80 border border-white/5 overflow-hidden">
+            <div className="rounded-xl border border-white/10 bg-white p-1 shadow-2xl">
+              <div className="rounded-lg bg-white border border-border overflow-hidden">
                 {/* Mock title bar */}
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5">
-                  <div className="h-2.5 w-2.5 rounded-full bg-risk-red/60" />
-                  <div className="h-2.5 w-2.5 rounded-full bg-risk-amber/60" />
-                  <div className="h-2.5 w-2.5 rounded-full bg-risk-green/60" />
-                  <span className="ml-3 text-xs text-white/30 font-mono">dashboard.litigeai.com</span>
+                <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
+                  <div className="h-2.5 w-2.5 rounded-full bg-risk-red" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-risk-amber" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-risk-green" />
+                  <span className="ml-3 text-xs text-steel font-mono">dashboard.litigeai.com</span>
                 </div>
                 {/* Mock content */}
                 <div className="p-6 space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="space-y-1">
-                      <div className="h-3 w-32 rounded bg-white/10" />
-                      <div className="h-2 w-20 rounded bg-white/5" />
+                      <div className="h-3 w-32 rounded bg-muted" />
+                      <div className="h-2 w-20 rounded bg-muted/50" />
                     </div>
                     <div className="h-8 w-24 rounded bg-gold/20 flex items-center justify-center">
                       <span className="text-xs text-gold font-semibold">3 Alerts</span>
@@ -263,10 +263,10 @@ export default function Landing() {
                       (item) => (
                         <div
                           key={item}
-                          className="flex items-center gap-3 rounded-md bg-white/[0.03] border border-white/5 px-3 py-2"
+                          className="flex items-center gap-3 rounded-md bg-platinum border border-border px-3 py-2"
                         >
                           <div className="h-2 w-2 rounded-full bg-gold" />
-                          <span className="text-xs text-white/50">{item}</span>
+                          <span className="text-xs text-steel">{item}</span>
                         </div>
                       )
                     )}
@@ -279,16 +279,16 @@ export default function Landing() {
       </section>
 
       {/* ─── Regulatory Bodies Strip ─── */}
-      <section className="border-y border-border bg-white">
+      <section className="border-y border-white/5 bg-white/[0.02]">
         <div className="container mx-auto px-6 py-8">
-          <p className="text-center text-xs uppercase tracking-widest text-steel mb-6">
+          <p className="text-center text-xs uppercase tracking-widest text-white/30 mb-6">
             Monitoring 20+ Nigerian Regulatory Bodies
           </p>
           <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
             {regulatoryBodies.map((body) => (
               <span
                 key={body}
-                className="text-sm font-semibold text-steel/40 hover:text-gold transition-colors tracking-wider"
+                className="text-sm font-semibold text-white/20 hover:text-gold/60 transition-colors tracking-wider"
               >
                 {body}
               </span>
@@ -298,58 +298,56 @@ export default function Landing() {
       </section>
 
       {/* ─── Features ─── */}
-      <section id="features" className="bg-white">
-        <div className="container mx-auto px-6 py-20 lg:py-28">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="font-heading text-3xl md:text-4xl text-ink mb-4">
-              Everything You Need to{" "}
-              <span className="text-gold">Stay Compliant</span>
-            </h2>
-            <p className="text-steel font-body">
-              Purpose-built tools for the Nigerian legal landscape, powered by AI
-              that understands local regulations.
-            </p>
-          </div>
+      <section id="features" className="container mx-auto px-6 py-20 lg:py-28">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <h2 className="font-heading text-3xl md:text-4xl text-white mb-4">
+            Everything You Need to{" "}
+            <span className="text-gold">Stay Compliant</span>
+          </h2>
+          <p className="text-white/50 font-body">
+            Purpose-built tools for the Nigerian legal landscape, powered by AI
+            that understands local regulations.
+          </p>
+        </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature) => (
-              <Card
-                key={feature.title}
-                className="bg-platinum border-border hover:border-gold/30 transition-all duration-300 group"
-              >
-                <CardContent className="p-6 space-y-4">
-                  <div className="h-10 w-10 rounded-lg bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                    <feature.icon className="h-5 w-5 text-gold" />
-                  </div>
-                  <h3 className="font-heading text-lg text-ink">{feature.title}</h3>
-                  <p className="text-sm text-steel leading-relaxed font-body">
-                    {feature.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {features.map((feature) => (
+            <Card
+              key={feature.title}
+              className="bg-white/[0.03] border-white/10 hover:border-gold/30 transition-all duration-300 group"
+            >
+              <CardContent className="p-6 space-y-4">
+                <div className="h-10 w-10 rounded-lg bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                  <feature.icon className="h-5 w-5 text-gold" />
+                </div>
+                <h3 className="font-heading text-lg text-white">{feature.title}</h3>
+                <p className="text-sm text-white/50 leading-relaxed font-body">
+                  {feature.description}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </section>
 
       {/* ─── Testimonials ─── */}
-      <section id="testimonials" className="border-y border-border bg-platinum">
+      <section id="testimonials" className="border-y border-white/5 bg-white/[0.02]">
         <div className="container mx-auto px-6 py-20 lg:py-28">
-          <h2 className="font-heading text-3xl md:text-4xl text-ink text-center mb-16">
+          <h2 className="font-heading text-3xl md:text-4xl text-white text-center mb-16">
             Trusted by <span className="text-gold">Legal Professionals</span>
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((t) => (
               <div
                 key={t.name}
-                className="rounded-xl border border-border bg-white p-6 space-y-4"
+                className="rounded-xl border border-white/10 bg-white/[0.03] p-6 space-y-4"
               >
-                <p className="text-steel text-sm leading-relaxed italic font-body">
+                <p className="text-white/60 text-sm leading-relaxed italic font-body">
                   "{t.quote}"
                 </p>
                 <div>
-                  <p className="text-ink font-semibold text-sm">{t.name}</p>
-                  <p className="text-steel text-xs">{t.role}</p>
+                  <p className="text-white font-semibold text-sm">{t.name}</p>
+                  <p className="text-white/40 text-xs">{t.role}</p>
                 </div>
               </div>
             ))}
@@ -358,68 +356,66 @@ export default function Landing() {
       </section>
 
       {/* ─── Pricing ─── */}
-      <section id="pricing" className="bg-white">
-        <div className="container mx-auto px-6 py-20 lg:py-28">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="font-heading text-3xl md:text-4xl text-ink mb-4">
-              Simple, <span className="text-gold">Transparent Pricing</span>
-            </h2>
-            <p className="text-steel font-body">
-              Start free for 14 days. No credit card required.
-            </p>
-          </div>
+      <section id="pricing" className="container mx-auto px-6 py-20 lg:py-28">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <h2 className="font-heading text-3xl md:text-4xl text-white mb-4">
+            Simple, <span className="text-gold">Transparent Pricing</span>
+          </h2>
+          <p className="text-white/50 font-body">
+            Start free for 14 days. No credit card required.
+          </p>
+        </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {pricingPlans.map((plan) => (
-              <Card
-                key={plan.name}
-                className={`relative overflow-hidden ${
-                  plan.highlighted
-                    ? "border-gold/50 bg-gold/5 shadow-[0_0_40px_-12px_hsl(43,78%,46%,0.15)]"
-                    : "border-border bg-white"
-                }`}
-              >
-                {plan.highlighted && (
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold/60 via-gold to-gold/60" />
-                )}
-                <CardContent className="p-6 space-y-6">
-                  <div>
-                    <h3 className="font-heading text-xl text-ink">{plan.name}</h3>
-                    <p className="text-xs text-steel mt-1 font-body">{plan.description}</p>
-                  </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-ink">{plan.price}</span>
-                    <span className="text-steel text-sm">{plan.period}</span>
-                  </div>
-                  <ul className="space-y-3">
-                    {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-steel">
-                        <Check className="h-4 w-4 text-gold mt-0.5 shrink-0" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link to="/signup" className="block">
-                    <Button
-                      className={`w-full ${
-                        plan.highlighted
-                          ? "bg-gold text-ink hover:bg-gold/90 font-semibold"
-                          : "bg-ink text-white hover:bg-ink/90"
-                      }`}
-                    >
-                      {plan.cta}
-                      <ChevronRight className="ml-1 h-4 w-4" />
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          {pricingPlans.map((plan) => (
+            <Card
+              key={plan.name}
+              className={`relative overflow-hidden ${
+                plan.highlighted
+                  ? "border-gold/50 bg-gold/5 shadow-[0_0_40px_-12px_hsl(43,78%,46%,0.15)]"
+                  : "border-white/10 bg-white/[0.03]"
+              }`}
+            >
+              {plan.highlighted && (
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold/60 via-gold to-gold/60" />
+              )}
+              <CardContent className="p-6 space-y-6">
+                <div>
+                  <h3 className="font-heading text-xl text-white">{plan.name}</h3>
+                  <p className="text-xs text-white/40 mt-1 font-body">{plan.description}</p>
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-bold text-white">{plan.price}</span>
+                  <span className="text-white/40 text-sm">{plan.period}</span>
+                </div>
+                <ul className="space-y-3">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2 text-sm text-white/60">
+                      <Check className="h-4 w-4 text-gold mt-0.5 shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link to="/signup" className="block">
+                  <Button
+                    className={`w-full ${
+                      plan.highlighted
+                        ? "bg-gold text-ink hover:bg-gold/90 font-semibold"
+                        : "bg-white/10 text-white hover:bg-white/15"
+                    }`}
+                  >
+                    {plan.cta}
+                    <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </section>
 
       {/* ─── CTA Banner ─── */}
-      <section className="bg-ink">
+      <section className="border-t border-white/5">
         <div className="container mx-auto px-6 py-20">
           <div className="rounded-2xl border border-gold/20 bg-gradient-to-br from-gold/10 via-gold/5 to-transparent p-10 md:p-16 text-center">
             <h2 className="font-heading text-3xl md:text-4xl text-white mb-4">
