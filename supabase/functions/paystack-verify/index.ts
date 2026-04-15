@@ -1,5 +1,10 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
-import { corsHeaders } from "https://esm.sh/@supabase/supabase-js@2.95.0/cors";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -30,11 +35,44 @@ Deno.serve(async (req) => {
     }
 
     const { reference } = await req.json();
-    if (!reference) {
+    if (!reference || typeof reference !== "string") {
       return new Response(JSON.stringify({ error: "reference required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    }
+
+    const adminClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+    );
+
+    // Idempotency + ownership check: verify payment belongs to user and isn't already processed
+    const { data: existingPayment } = await adminClient
+      .from("payments")
+      .select("id, status, user_id")
+      .eq("paystack_reference", reference)
+      .single();
+
+    if (!existingPayment) {
+      return new Response(JSON.stringify({ error: "Payment record not found" }), {
+        status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (existingPayment.user_id !== user.id) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (existingPayment.status === "success") {
+      return new Response(
+        JSON.stringify({ verified: true, message: "Already verified" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     // Verify with Paystack
@@ -46,22 +84,18 @@ Deno.serve(async (req) => {
 
     const verifyData = await verifyRes.json();
 
-    const adminClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
-
     if (verifyData.status && verifyData.data.status === "success") {
       const meta = verifyData.data.metadata;
 
-      // Update payment status
+      // Update payment status (with user_id filter)
       await adminClient
         .from("payments")
         .update({
           status: "success",
           paystack_transaction_id: String(verifyData.data.id),
         })
-        .eq("paystack_reference", reference);
+        .eq("paystack_reference", reference)
+        .eq("user_id", user.id);
 
       // Create/update subscription
       const now = new Date();
@@ -72,7 +106,6 @@ Deno.serve(async (req) => {
         periodEnd.setMonth(periodEnd.getMonth() + 1);
       }
 
-      // Check existing subscription
       const { data: existingSub } = await adminClient
         .from("subscriptions")
         .select("id")
@@ -111,11 +144,11 @@ Deno.serve(async (req) => {
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     } else {
-      // Update payment as failed
       await adminClient
         .from("payments")
         .update({ status: "failed" })
-        .eq("paystack_reference", reference);
+        .eq("paystack_reference", reference)
+        .eq("user_id", user.id);
 
       return new Response(
         JSON.stringify({ verified: false, reason: verifyData.data?.gateway_response || "Payment failed" }),
@@ -123,7 +156,7 @@ Deno.serve(async (req) => {
       );
     }
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

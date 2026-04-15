@@ -1,5 +1,10 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
-import { corsHeaders } from "https://esm.sh/@supabase/supabase-js@2.95.0/cors";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -30,16 +35,49 @@ Deno.serve(async (req) => {
     }
 
     const { transaction_id, tx_ref } = await req.json();
-    if (!transaction_id) {
+    if (!transaction_id || typeof transaction_id !== "string") {
       return new Response(JSON.stringify({ error: "transaction_id required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
+    const adminClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+    );
+
+    // Idempotency + ownership check
+    const { data: existingPayment } = await adminClient
+      .from("payments")
+      .select("id, status, user_id")
+      .eq("flutterwave_reference", tx_ref)
+      .single();
+
+    if (!existingPayment) {
+      return new Response(JSON.stringify({ error: "Payment record not found" }), {
+        status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (existingPayment.user_id !== user.id) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (existingPayment.status === "success") {
+      return new Response(
+        JSON.stringify({ verified: true, message: "Already verified" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // Verify with Flutterwave
     const verifyRes = await fetch(
-      `https://api.flutterwave.com/v3/transactions/${transaction_id}/verify`,
+      `https://api.flutterwave.com/v3/transactions/${encodeURIComponent(transaction_id)}/verify`,
       {
         headers: {
           Authorization: `Bearer ${Deno.env.get("FLUTTERWAVE_SECRET_KEY")}`,
@@ -49,22 +87,18 @@ Deno.serve(async (req) => {
 
     const verifyData = await verifyRes.json();
 
-    const adminClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
-
     if (verifyData.status === "success" && verifyData.data.status === "successful") {
       const meta = verifyData.data.meta;
 
-      // Update payment
+      // Update payment (with user_id filter)
       await adminClient
         .from("payments")
         .update({
           status: "success",
           flutterwave_transaction_id: String(transaction_id),
         })
-        .eq("flutterwave_reference", tx_ref);
+        .eq("flutterwave_reference", tx_ref)
+        .eq("user_id", user.id);
 
       // Create/update subscription
       const now = new Date();
@@ -118,7 +152,8 @@ Deno.serve(async (req) => {
       await adminClient
         .from("payments")
         .update({ status: "failed" })
-        .eq("flutterwave_reference", tx_ref);
+        .eq("flutterwave_reference", tx_ref)
+        .eq("user_id", user.id);
 
       return new Response(
         JSON.stringify({ verified: false, reason: "Payment verification failed" }),
@@ -126,7 +161,7 @@ Deno.serve(async (req) => {
       );
     }
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
