@@ -29,7 +29,7 @@ export default function TrialPrep() {
           {mockCases.map((c) => (
             <Card
               key={c.id}
-              className="shadow-card hover:shadow-card-hover transition-shadow cursor-pointer"
+              className="shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
               onClick={() => setActiveCase(c.id)}
             >
               <CardContent className="flex items-center gap-4 p-5">
