@@ -67,31 +67,32 @@ const regulatoryBodies = [
 
 const pricingPlans = [
   {
-    name: "Solo Practitioner",
-    price: "₦25,000",
+    name: "Solo",
+    price: "₦15,000",
     period: "/month",
-    description: "For individual lawyers and consultants",
+    description: "For individual practitioners",
     features: [
-      "Regulatory feed (5 bodies)",
-      "10 contract audits/month",
-      "Document vault (5 matters)",
-      "Email support",
+      "Document Vault",
+      "Contract Auditor",
+      "Trial Prep Studio",
+      "Regulatory Feed (read-only)",
+      "5 active matters",
     ],
     cta: "Start Free Trial",
     highlighted: false,
   },
   {
-    name: "Law Firm",
-    price: "₦75,000",
+    name: "Chambers",
+    price: "₦45,000",
     period: "/month",
-    description: "For teams of up to 10 legal professionals",
+    description: "For law firms up to 10 lawyers",
     features: [
-      "Regulatory feed (all bodies)",
-      "Unlimited contract audits",
-      "Document vault (unlimited)",
-      "Trial prep studio",
-      "Priority support",
-      "Team collaboration",
+      "All Solo features",
+      "Full Regulatory Feed",
+      "Team access (10 members)",
+      "Unlimited matters",
+      "50 audits/month",
+      "20GB storage",
     ],
     cta: "Start Free Trial",
     highlighted: true,
@@ -100,16 +101,15 @@ const pricingPlans = [
     name: "Enterprise",
     price: "Custom",
     period: "",
-    description: "For corporations and large firms",
+    description: "For large firms and corporate legal",
     features: [
-      "Everything in Law Firm",
-      "Custom integrations",
+      "Everything in Chambers",
+      "Unlimited everything",
+      "API access",
       "Dedicated account manager",
-      "On-premise deployment option",
-      "SLA guarantee",
-      "Custom AI training",
+      "Custom onboarding",
     ],
-    cta: "Contact Sales",
+    cta: "Contact Us",
     highlighted: false,
   },
 ];
@@ -146,9 +146,9 @@ export default function Landing() {
             <a href="#features" className="text-sm text-white/70 hover:text-gold transition-colors">
               Features
             </a>
-            <a href="#pricing" className="text-sm text-white/70 hover:text-gold transition-colors">
+            <Link to="/pricing" className="text-sm text-white/70 hover:text-gold transition-colors">
               Pricing
-            </a>
+            </Link>
             <a href="#testimonials" className="text-sm text-white/70 hover:text-gold transition-colors">
               Testimonials
             </a>
@@ -396,7 +396,7 @@ export default function Landing() {
                     </li>
                   ))}
                 </ul>
-                <Link to="/signup" className="block">
+                <Link to={plan.name === "Enterprise" ? "/waitlist" : "/signup"} className="block">
                   <Button
                     className={`w-full ${
                       plan.highlighted

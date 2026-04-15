@@ -10,6 +10,9 @@ import { Layout } from "@/components/layout/Layout";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Pricing from "./pages/Pricing";
+import Waitlist from "./pages/Waitlist";
+import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
 import RegulatoryFeed from "./pages/RegulatoryFeed";
 import ContractAuditor from "./pages/ContractAuditor";
@@ -33,6 +36,18 @@ const App = () => (
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/waitlist" element={<Waitlist />} />
+
+            {/* Onboarding (protected but no layout) */}
+            <Route
+              path="/onboarding"
+              element={
+                <ProtectedRoute>
+                  <Onboarding />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Protected routes with Layout */}
             <Route
