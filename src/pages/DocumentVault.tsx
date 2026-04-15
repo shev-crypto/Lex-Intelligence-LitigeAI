@@ -3,8 +3,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Plus, FolderOpen, Calendar, FileText, ChevronRight } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Search, Plus, FolderOpen, Calendar, FileText, ChevronRight, Download, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { exportToCSV } from "@/lib/export";
+import { useToast } from "@/hooks/use-toast";
 
 const matters = [
   { id: "1", title: "TechCorp Ltd v. DataBridge Systems", client: "TechCorp Ltd", type: "Commercial Litigation", status: "active", docs: 14, nextHearing: "Apr 28, 2026" },
@@ -23,11 +32,48 @@ const statusColors = {
 
 export default function DocumentVault() {
   const [search, setSearch] = useState("");
+  const [selectedMatters, setSelectedMatters] = useState<Set<string>>(new Set());
+  const { toast } = useToast();
 
   const filtered = matters.filter((m) =>
     m.title.toLowerCase().includes(search.toLowerCase()) ||
     m.client.toLowerCase().includes(search.toLowerCase())
   );
+
+  const toggleMatter = (id: string) => {
+    setSelectedMatters((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleAll = () => {
+    if (selectedMatters.size === filtered.length) {
+      setSelectedMatters(new Set());
+    } else {
+      setSelectedMatters(new Set(filtered.map((m) => m.id)));
+    }
+  };
+
+  const handleExportCSV = () => {
+    const items = selectedMatters.size > 0
+      ? matters.filter((m) => selectedMatters.has(m.id))
+      : filtered;
+    exportToCSV(
+      items.map((m) => ({
+        Title: m.title,
+        Client: m.client,
+        Type: m.type,
+        Status: m.status,
+        Documents: m.docs,
+        "Next Hearing": m.nextHearing || "—",
+      })),
+      "Document_Vault_Matters"
+    );
+    toast({ title: "Exported", description: "CSV downloaded." });
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -36,9 +82,25 @@ export default function DocumentVault() {
           <h1 className="text-3xl font-heading">Document Vault</h1>
           <p className="text-muted-foreground mt-1">Centralized matter and document management.</p>
         </div>
-        <Button className="bg-gold text-ink hover:bg-gold/90 font-semibold gap-2">
-          <Plus className="h-4 w-4" /> New Matter
-        </Button>
+        <div className="flex items-center gap-2">
+          {selectedMatters.size > 0 && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-1.5">
+                  <Download className="h-4 w-4" /> Actions ({selectedMatters.size})
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={handleExportCSV}>
+                  <Download className="h-4 w-4 mr-2" /> Export as CSV
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+          <Button className="bg-gold text-ink hover:bg-gold/90 font-semibold gap-2">
+            <Plus className="h-4 w-4" /> New Matter
+          </Button>
+        </div>
       </div>
 
       {/* Search */}
@@ -52,46 +114,66 @@ export default function DocumentVault() {
         />
       </div>
 
+      {/* Select all */}
+      <div className="flex items-center gap-3">
+        <Checkbox
+          checked={filtered.length > 0 && selectedMatters.size === filtered.length}
+          onCheckedChange={toggleAll}
+        />
+        <span className="text-sm text-muted-foreground">
+          {selectedMatters.size > 0 ? `${selectedMatters.size} selected` : "Select all"}
+        </span>
+      </div>
+
       {/* Matters list */}
       <div className="space-y-3">
         {filtered.length === 0 && (
           <p className="text-center text-muted-foreground py-8">No matters found.</p>
         )}
-        {filtered.map((matter) => (
-          <Link key={matter.id} to={`/document-vault/${matter.id}`}>
-            <Card className="shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
-              <CardContent className="p-5">
-                <div className="flex items-center gap-4">
-                  <div className="h-10 w-10 rounded-lg bg-gold/10 flex items-center justify-center shrink-0">
-                    <FolderOpen className="h-5 w-5 text-gold" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-sm truncate">{matter.title}</h3>
-                      <Badge className={`${statusColors[matter.status as keyof typeof statusColors]} border-0 capitalize text-xs`}>
-                        {matter.status}
-                      </Badge>
-                    </div>
-                    <div className="flex items-center gap-4 mt-1 text-xs text-muted-foreground">
-                      <span>{matter.client}</span>
-                      <span>·</span>
-                      <span>{matter.type}</span>
-                      <span>·</span>
-                      <span className="flex items-center gap-1"><FileText className="h-3 w-3" /> {matter.docs} docs</span>
-                      {matter.nextHearing && (
-                        <>
+        {filtered.map((matter) => {
+          const isSelected = selectedMatters.has(matter.id);
+          return (
+            <div key={matter.id} className="flex items-center gap-3">
+              <Checkbox
+                checked={isSelected}
+                onCheckedChange={() => toggleMatter(matter.id)}
+              />
+              <Link to={`/document-vault/${matter.id}`} className="flex-1">
+                <Card className={`shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 cursor-pointer ${isSelected ? "ring-2 ring-gold/40" : ""}`}>
+                  <CardContent className="p-5">
+                    <div className="flex items-center gap-4">
+                      <div className="h-10 w-10 rounded-lg bg-gold/10 flex items-center justify-center shrink-0">
+                        <FolderOpen className="h-5 w-5 text-gold" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-semibold text-sm truncate">{matter.title}</h3>
+                          <Badge className={`${statusColors[matter.status as keyof typeof statusColors]} border-0 capitalize text-xs`}>
+                            {matter.status}
+                          </Badge>
+                        </div>
+                        <div className="flex items-center gap-4 mt-1 text-xs text-muted-foreground">
+                          <span>{matter.client}</span>
                           <span>·</span>
-                          <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {matter.nextHearing}</span>
-                        </>
-                      )}
+                          <span>{matter.type}</span>
+                          <span>·</span>
+                          <span className="flex items-center gap-1"><FileText className="h-3 w-3" /> {matter.docs} docs</span>
+                          {matter.nextHearing && (
+                            <>
+                              <span>·</span>
+                              <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {matter.nextHearing}</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0" />
                     </div>
-                  </div>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
