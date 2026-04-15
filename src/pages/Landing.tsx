@@ -161,6 +161,7 @@ export default function Landing() {
             </a>
           </nav>
           <div className="hidden md:flex items-center gap-3">
+            <AdminButton variant="link" />
             <Link to="/login">
               <Button variant="ghost" className="text-white/80 hover:text-gold hover:bg-white/5">
                 Login

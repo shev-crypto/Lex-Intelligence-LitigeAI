@@ -130,7 +130,7 @@ const App = () => (
               path="/admin"
               element={
                 <AdminRoute>
-                  <Admin />
+                  <Layout><Admin /></Layout>
                 </AdminRoute>
               }
             />
