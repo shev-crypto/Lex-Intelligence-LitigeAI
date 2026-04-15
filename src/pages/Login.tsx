@@ -55,7 +55,7 @@ export default function Login() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-platinum px-4">
-      <Card className="w-full max-w-md shadow-card">
+      <Card className="w-full max-w-md shadow-card animate-scale-in">
         <CardHeader className="text-center">
           <span className="font-heading text-2xl bg-gradient-to-r from-gold via-gold/90 to-white bg-clip-text text-transparent mb-2 block">LitigeAI</span>
           <CardTitle className="text-xl">Welcome back</CardTitle>

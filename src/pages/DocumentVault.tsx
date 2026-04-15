@@ -30,7 +30,7 @@ export default function DocumentVault() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-heading">Document Vault</h1>
@@ -59,7 +59,7 @@ export default function DocumentVault() {
         )}
         {filtered.map((matter) => (
           <Link key={matter.id} to={`/document-vault/${matter.id}`}>
-            <Card className="shadow-card hover:shadow-card-hover transition-shadow cursor-pointer">
+            <Card className="shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
               <CardContent className="p-5">
                 <div className="flex items-center gap-4">
                   <div className="h-10 w-10 rounded-lg bg-gold/10 flex items-center justify-center shrink-0">

@@ -13,7 +13,7 @@ export default function TrialPrep() {
   const [activeCase, setActiveCase] = useState<number | null>(null);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-heading">Trial Prep Studio</h1>
@@ -29,7 +29,7 @@ export default function TrialPrep() {
           {mockCases.map((c) => (
             <Card
               key={c.id}
-              className="shadow-card hover:shadow-card-hover transition-shadow cursor-pointer"
+              className="shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
               onClick={() => setActiveCase(c.id)}
             >
               <CardContent className="flex items-center gap-4 p-5">

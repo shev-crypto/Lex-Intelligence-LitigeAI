@@ -169,7 +169,7 @@ export default function Landing() {
       </header>
 
       {/* ─── Hero ─── */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden animate-fade-in">
         {/* Subtle gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-transparent pointer-events-none" />
 
@@ -314,7 +314,7 @@ export default function Landing() {
           {features.map((feature) => (
             <Card
               key={feature.title}
-              className="bg-white/[0.03] border-white/10 hover:border-gold/30 transition-all duration-300 group"
+              className="bg-white/[0.03] border-white/10 hover:border-gold/30 hover:-translate-y-1 transition-all duration-300 group"
             >
               <CardContent className="p-6 space-y-4">
                 <div className="h-10 w-10 rounded-lg bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
