@@ -7,11 +7,12 @@ import {
   FolderOpen,
   Scale,
   Settings,
-  Bell,
   LogOut,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/contexts/AuthContext";
+import { TrialBanner } from "@/components/TrialBanner";
+import { NotificationBell } from "@/components/NotificationBell";
 import {
   Sidebar,
   SidebarContent,
@@ -43,7 +44,7 @@ function AppSidebar() {
     <Sidebar collapsible="icon" className="border-r-0">
       <div className="flex h-16 items-center px-4 border-b border-sidebar-border">
         {!collapsed && (
-          <span className="font-heading text-xl text-gold tracking-tight">
+          <span className="font-heading text-xl bg-gradient-to-r from-gold via-gold/90 to-white bg-clip-text text-transparent tracking-tight">
             LitigeAI
           </span>
         )}
@@ -52,6 +53,8 @@ function AppSidebar() {
         )}
       </div>
       <SidebarContent className="pt-4">
+        {/* Trial banner */}
+        {!collapsed && <TrialBanner />}
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -91,9 +94,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <SidebarTrigger />
             </div>
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5 text-steel" />
-              </Button>
+              <NotificationBell />
               <div className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-full bg-gold/20 flex items-center justify-center">
                   <span className="text-sm font-semibold text-gold">
