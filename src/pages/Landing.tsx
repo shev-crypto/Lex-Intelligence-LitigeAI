@@ -365,20 +365,21 @@ export default function Landing() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature) => (
-            <Card
-              key={feature.title}
-              className="bg-white/[0.03] border-white/10 hover:border-gold/30 hover:-translate-y-1 transition-all duration-300 group"
-            >
-              <CardContent className="p-6 space-y-4">
-                <div className="h-10 w-10 rounded-lg bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                  <feature.icon className="h-5 w-5 text-gold" />
-                </div>
-                <h3 className="font-heading text-lg text-white">{feature.title}</h3>
-                <p className="text-sm text-white/75 leading-relaxed font-body">
-                  {feature.description}
-                </p>
-              </CardContent>
-            </Card>
+            <Link key={feature.title} to={user ? feature.url : "/signup"}>
+              <Card
+                className="bg-white/[0.03] border-white/10 hover:border-gold/30 hover:-translate-y-1 transition-all duration-300 group cursor-pointer h-full"
+              >
+                <CardContent className="p-6 space-y-4">
+                  <div className="h-10 w-10 rounded-lg bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                    <feature.icon className="h-5 w-5 text-gold" />
+                  </div>
+                  <h3 className="font-heading text-lg text-white">{feature.title}</h3>
+                  <p className="text-sm text-white/75 leading-relaxed font-body">
+                    {feature.description}
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       </section>
