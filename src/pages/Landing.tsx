@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { AdminButton } from "@/components/AdminButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -159,6 +161,7 @@ export default function Landing() {
             </a>
           </nav>
           <div className="hidden md:flex items-center gap-3">
+            <AdminButton variant="link" />
             <Link to="/login">
               <Button variant="ghost" className="text-white/80 hover:text-gold hover:bg-white/5">
                 Login
@@ -181,18 +184,19 @@ export default function Landing() {
         {/* Mobile menu */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-white/10 bg-ink/95 backdrop-blur px-6 py-4 space-y-3 animate-fade-in">
-            <a href="#features" className="block text-sm text-white/70 hover:text-gold transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
+            <a href="#features" className="block text-sm text-white hover:text-gold transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
               Features
             </a>
-            <Link to="/pricing" className="block text-sm text-white/70 hover:text-gold transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
+            <Link to="/pricing" className="block text-sm text-white hover:text-gold transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
               Pricing
             </Link>
-            <a href="#testimonials" className="block text-sm text-white/70 hover:text-gold transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
+            <a href="#testimonials" className="block text-sm text-white hover:text-gold transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
               Testimonials
             </a>
             <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
+              <AdminButton variant="link" />
               <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="outline" className="w-full border-white/20 text-white/80 hover:text-gold hover:bg-white/5">
+                <Button variant="outline" className="w-full border-white/20 bg-ink text-white hover:text-gold hover:bg-white/5">
                   Login
                 </Button>
               </Link>

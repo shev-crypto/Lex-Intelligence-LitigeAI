@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   Newspaper,
@@ -46,14 +46,16 @@ function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r-0">
       <div className="flex h-16 items-center px-4 border-b border-sidebar-border">
-        {!collapsed && (
-          <span className="font-heading text-xl bg-gradient-to-r from-gold via-gold/90 to-white bg-clip-text text-transparent tracking-tight">
-            LitigeAI
-          </span>
-        )}
-        {collapsed && (
-          <span className="font-heading text-xl text-gold">L</span>
-        )}
+        <Link to="/">
+          {!collapsed && (
+            <span className="font-heading text-xl bg-gradient-to-r from-gold via-gold/90 to-white bg-clip-text text-transparent tracking-tight">
+              LitigeAI
+            </span>
+          )}
+          {collapsed && (
+            <span className="font-heading text-xl text-gold">L</span>
+          )}
+        </Link>
       </div>
       <SidebarContent className="pt-4">
         {/* Trial banner */}
