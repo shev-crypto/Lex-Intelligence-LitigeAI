@@ -226,21 +226,21 @@ export default function Landing() {
 
           {/* Product preview — mock dashboard */}
           <div className="flex-1 w-full max-w-xl">
-            <div className="rounded-xl border border-white/10 bg-white/[0.03] p-1 shadow-2xl">
-              <div className="rounded-lg bg-ink/80 border border-white/5 overflow-hidden">
+            <div className="rounded-xl border border-white/10 bg-white p-1 shadow-2xl">
+              <div className="rounded-lg bg-white border border-border overflow-hidden">
                 {/* Mock title bar */}
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5">
-                  <div className="h-2.5 w-2.5 rounded-full bg-risk-red/60" />
-                  <div className="h-2.5 w-2.5 rounded-full bg-risk-amber/60" />
-                  <div className="h-2.5 w-2.5 rounded-full bg-risk-green/60" />
-                  <span className="ml-3 text-xs text-white/30 font-mono">dashboard.litigeai.com</span>
+                <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
+                  <div className="h-2.5 w-2.5 rounded-full bg-risk-red" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-risk-amber" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-risk-green" />
+                  <span className="ml-3 text-xs text-steel font-mono">dashboard.litigeai.com</span>
                 </div>
                 {/* Mock content */}
                 <div className="p-6 space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="space-y-1">
-                      <div className="h-3 w-32 rounded bg-white/10" />
-                      <div className="h-2 w-20 rounded bg-white/5" />
+                      <div className="h-3 w-32 rounded bg-muted" />
+                      <div className="h-2 w-20 rounded bg-muted/50" />
                     </div>
                     <div className="h-8 w-24 rounded bg-gold/20 flex items-center justify-center">
                       <span className="text-xs text-gold font-semibold">3 Alerts</span>
@@ -263,10 +263,10 @@ export default function Landing() {
                       (item) => (
                         <div
                           key={item}
-                          className="flex items-center gap-3 rounded-md bg-white/[0.03] border border-white/5 px-3 py-2"
+                          className="flex items-center gap-3 rounded-md bg-platinum border border-border px-3 py-2"
                         >
                           <div className="h-2 w-2 rounded-full bg-gold" />
-                          <span className="text-xs text-white/50">{item}</span>
+                          <span className="text-xs text-steel">{item}</span>
                         </div>
                       )
                     )}
