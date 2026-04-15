@@ -509,8 +509,8 @@ export default function Landing() {
               {
                 title: "Legal",
                 links: [
-                  { label: "Privacy Policy", url: "#" },
-                  { label: "Terms of Service", url: "#" },
+                  { label: "Privacy Policy", url: "/privacy" },
+                  { label: "Terms of Service", url: "/terms" },
                   { label: "Admin", url: "/admin" },
                 ],
               },
