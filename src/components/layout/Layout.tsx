@@ -6,6 +6,7 @@ import {
   FileSearch,
   FolderOpen,
   Scale,
+  CalendarCheck,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -34,6 +35,7 @@ const navItems = [
   { title: "Contract Auditor", url: "/contract-auditor", icon: FileSearch },
   { title: "Document Vault", url: "/document-vault", icon: FolderOpen },
   { title: "Trial Prep Studio", url: "/trial-prep", icon: Scale },
+  { title: "Compliance Calendar", url: "/compliance-calendar", icon: CalendarCheck },
   { title: "Settings", url: "/settings", icon: Settings },
 ];
 
