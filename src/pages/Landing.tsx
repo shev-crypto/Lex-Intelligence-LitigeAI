@@ -139,6 +139,8 @@ const testimonials = [
 ];
 
 export default function Landing() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-ink text-foreground">
       {/* ─── Navbar ─── */}
