@@ -81,7 +81,7 @@ export default function RegulatoryFeed() {
           const sev = severityConfig[alert.severity as keyof typeof severityConfig];
           const Icon = sev.icon;
           return (
-            <Card key={alert.id} className="shadow-card hover:shadow-card-hover transition-shadow">
+            <Card key={alert.id} className="shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200">
               <CardContent className="p-5">
                 <div className="flex items-start gap-4">
                   <div className={`h-10 w-10 rounded-lg ${sev.bg} flex items-center justify-center shrink-0 mt-0.5`}>
