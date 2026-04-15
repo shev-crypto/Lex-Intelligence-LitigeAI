@@ -141,7 +141,7 @@ export default function Landing() {
       {/* ─── Navbar ─── */}
       <header className="sticky top-0 z-50 border-b border-white/10 bg-ink/95 backdrop-blur supports-[backdrop-filter]:bg-ink/80">
         <div className="container mx-auto flex h-16 items-center justify-between px-6">
-          <span className="font-heading text-2xl text-gold">LitigeAI</span>
+          <span className="font-heading text-2xl bg-gradient-to-r from-gold via-gold/90 to-white bg-clip-text text-transparent">LitigeAI</span>
           <nav className="hidden md:flex items-center gap-8">
             <a href="#features" className="text-sm text-white/70 hover:text-gold transition-colors">
               Features
