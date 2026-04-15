@@ -356,68 +356,66 @@ export default function Landing() {
       </section>
 
       {/* ─── Pricing ─── */}
-      <section id="pricing" className="bg-white">
-        <div className="container mx-auto px-6 py-20 lg:py-28">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="font-heading text-3xl md:text-4xl text-ink mb-4">
-              Simple, <span className="text-gold">Transparent Pricing</span>
-            </h2>
-            <p className="text-steel font-body">
-              Start free for 14 days. No credit card required.
-            </p>
-          </div>
+      <section id="pricing" className="container mx-auto px-6 py-20 lg:py-28">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <h2 className="font-heading text-3xl md:text-4xl text-white mb-4">
+            Simple, <span className="text-gold">Transparent Pricing</span>
+          </h2>
+          <p className="text-white/50 font-body">
+            Start free for 14 days. No credit card required.
+          </p>
+        </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {pricingPlans.map((plan) => (
-              <Card
-                key={plan.name}
-                className={`relative overflow-hidden ${
-                  plan.highlighted
-                    ? "border-gold/50 bg-gold/5 shadow-[0_0_40px_-12px_hsl(43,78%,46%,0.15)]"
-                    : "border-border bg-white"
-                }`}
-              >
-                {plan.highlighted && (
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold/60 via-gold to-gold/60" />
-                )}
-                <CardContent className="p-6 space-y-6">
-                  <div>
-                    <h3 className="font-heading text-xl text-ink">{plan.name}</h3>
-                    <p className="text-xs text-steel mt-1 font-body">{plan.description}</p>
-                  </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-ink">{plan.price}</span>
-                    <span className="text-steel text-sm">{plan.period}</span>
-                  </div>
-                  <ul className="space-y-3">
-                    {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-steel">
-                        <Check className="h-4 w-4 text-gold mt-0.5 shrink-0" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link to="/signup" className="block">
-                    <Button
-                      className={`w-full ${
-                        plan.highlighted
-                          ? "bg-gold text-ink hover:bg-gold/90 font-semibold"
-                          : "bg-ink text-white hover:bg-ink/90"
-                      }`}
-                    >
-                      {plan.cta}
-                      <ChevronRight className="ml-1 h-4 w-4" />
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          {pricingPlans.map((plan) => (
+            <Card
+              key={plan.name}
+              className={`relative overflow-hidden ${
+                plan.highlighted
+                  ? "border-gold/50 bg-gold/5 shadow-[0_0_40px_-12px_hsl(43,78%,46%,0.15)]"
+                  : "border-white/10 bg-white/[0.03]"
+              }`}
+            >
+              {plan.highlighted && (
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold/60 via-gold to-gold/60" />
+              )}
+              <CardContent className="p-6 space-y-6">
+                <div>
+                  <h3 className="font-heading text-xl text-white">{plan.name}</h3>
+                  <p className="text-xs text-white/40 mt-1 font-body">{plan.description}</p>
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-bold text-white">{plan.price}</span>
+                  <span className="text-white/40 text-sm">{plan.period}</span>
+                </div>
+                <ul className="space-y-3">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2 text-sm text-white/60">
+                      <Check className="h-4 w-4 text-gold mt-0.5 shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link to="/signup" className="block">
+                  <Button
+                    className={`w-full ${
+                      plan.highlighted
+                        ? "bg-gold text-ink hover:bg-gold/90 font-semibold"
+                        : "bg-white/10 text-white hover:bg-white/15"
+                    }`}
+                  >
+                    {plan.cta}
+                    <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </section>
 
       {/* ─── CTA Banner ─── */}
-      <section className="bg-ink">
+      <section className="border-t border-white/5">
         <div className="container mx-auto px-6 py-20">
           <div className="rounded-2xl border border-gold/20 bg-gradient-to-br from-gold/10 via-gold/5 to-transparent p-10 md:p-16 text-center">
             <h2 className="font-heading text-3xl md:text-4xl text-white mb-4">
