@@ -24,36 +24,42 @@ const features = [
     title: "Regulatory Feed",
     description:
       "Real-time alerts from SEC, CBN, FIRS, CAC and 20+ Nigerian regulatory bodies. Never miss a compliance deadline.",
+    url: "/regulatory-feed",
   },
   {
     icon: FileSearch,
     title: "Contract Auditor",
     description:
       "AI-powered clause analysis that flags risks, missing provisions, and non-compliant language in seconds.",
+    url: "/contract-auditor",
   },
   {
     icon: BookOpen,
     title: "Document Vault",
     description:
       "Centralized matter management with hearing dates, document storage, notes, and deadline tracking.",
+    url: "/document-vault",
   },
   {
     icon: Scale,
     title: "Trial Prep Studio",
     description:
       "Multi-document analysis for case strategy, precedent research, and argument preparation.",
+    url: "/trial-prep",
   },
   {
     icon: Shield,
     title: "Compliance Scoring",
     description:
       "Automated risk assessment with red/amber/green scoring across all your contracts and regulatory obligations.",
+    url: "/compliance-calendar",
   },
   {
     icon: Zap,
     title: "AI Legal Assistant",
     description:
       "Ask questions in plain English, get answers grounded in Nigerian law, case precedent, and your own documents.",
+    url: "/dashboard",
   },
 ];
 
