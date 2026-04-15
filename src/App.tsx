@@ -20,6 +20,7 @@ import DocumentVault from "./pages/DocumentVault";
 import MatterDetail from "./pages/MatterDetail";
 import TrialPrep from "./pages/TrialPrep";
 import SettingsPage from "./pages/SettingsPage";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -103,6 +104,16 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Layout><SettingsPage /></Layout>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Admin route */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <Admin />
                 </ProtectedRoute>
               }
             />

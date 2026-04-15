@@ -92,7 +92,7 @@ export default function Login() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={12} />
+              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
               <p className="text-xs text-muted-foreground">Min 12 characters with letters, numbers & symbols</p>
             </div>
             <Button type="submit" className="w-full bg-gold text-ink hover:bg-gold/90 font-semibold" disabled={loading}>

@@ -26,6 +26,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import { AdminButton } from "@/components/AdminButton";
 
 const navItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
@@ -75,6 +76,12 @@ function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        {/* Admin link (only visible to admins) */}
+        {!collapsed && (
+          <div className="px-3 mt-2">
+            <AdminButton variant="sidebar" />
+          </div>
+        )}
       </SidebarContent>
     </Sidebar>
   );
@@ -94,6 +101,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <SidebarTrigger />
             </div>
             <div className="flex items-center gap-4">
+              <AdminButton variant="icon" />
               <NotificationBell />
               <div className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-full bg-gold/20 flex items-center justify-center">

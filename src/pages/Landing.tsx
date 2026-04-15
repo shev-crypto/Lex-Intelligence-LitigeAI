@@ -452,25 +452,39 @@ export default function Landing() {
             {[
               {
                 title: "Product",
-                links: ["Regulatory Feed", "Contract Auditor", "Document Vault", "Trial Prep"],
+                links: [
+                  { label: "Regulatory Feed", url: "/regulatory-feed" },
+                  { label: "Contract Auditor", url: "/contract-auditor" },
+                  { label: "Document Vault", url: "/document-vault" },
+                  { label: "Trial Prep", url: "/trial-prep" },
+                ],
               },
               {
                 title: "Company",
-                links: ["About", "Careers", "Blog", "Contact"],
+                links: [
+                  { label: "About", url: "#features" },
+                  { label: "Pricing", url: "/pricing" },
+                  { label: "Waitlist", url: "/waitlist" },
+                  { label: "Contact", url: "mailto:hello@litigeai.com" },
+                ],
               },
               {
                 title: "Legal",
-                links: ["Privacy Policy", "Terms of Service", "Data Processing"],
+                links: [
+                  { label: "Privacy Policy", url: "#" },
+                  { label: "Terms of Service", url: "#" },
+                  { label: "Admin", url: "/admin" },
+                ],
               },
             ].map((col) => (
               <div key={col.title}>
                 <h4 className="text-sm font-semibold text-white/70 mb-4">{col.title}</h4>
                 <ul className="space-y-2">
                   {col.links.map((link) => (
-                    <li key={link}>
-                      <span className="text-xs text-white/80 hover:text-gold cursor-pointer transition-colors">
-                        {link}
-                      </span>
+                    <li key={link.label}>
+                      <Link to={link.url} className="text-xs text-white/80 hover:text-gold transition-colors">
+                        {link.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>
