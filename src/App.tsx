@@ -23,6 +23,9 @@ import MatterDetail from "./pages/MatterDetail";
 import TrialPrep from "./pages/TrialPrep";
 import SettingsPage from "./pages/SettingsPage";
 import Admin from "./pages/Admin";
+import ComplianceCalendar from "./pages/ComplianceCalendar";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -112,6 +115,15 @@ const App = () => (
               }
             />
 
+            <Route
+              path="/compliance-calendar"
+              element={
+                <ProtectedRoute>
+                  <Layout><ComplianceCalendar /></Layout>
+                </ProtectedRoute>
+              }
+            />
+
             {/* Admin route */}
             <Route
               path="/admin"
@@ -121,6 +133,10 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+
+            {/* Public legal pages */}
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
