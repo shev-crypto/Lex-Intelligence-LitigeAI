@@ -1,8 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Upload, FileText, Scale, BookOpen, Lightbulb, Plus } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Upload, FileText, Scale, BookOpen, Lightbulb, Plus, Download, Save, Trash2, Clock } from "lucide-react";
+import { useActivityLog } from "@/hooks/useActivityLog";
+import { useSavedSessions } from "@/hooks/useSavedSessions";
+import { exportToPDFText } from "@/lib/export";
+import { useToast } from "@/hooks/use-toast";
 
 const mockCases = [
   { id: 1, name: "TechCorp v. DataBridge — Trial Bundle", files: 5, date: "Apr 14, 2026" },
@@ -11,6 +22,45 @@ const mockCases = [
 
 export default function TrialPrep() {
   const [activeCase, setActiveCase] = useState<number | null>(null);
+  const { logActivity } = useActivityLog();
+  const { sessions, saveSession, deleteSession } = useSavedSessions("trial_prep");
+  const { toast } = useToast();
+
+  const handleSaveSession = async () => {
+    const caseName = mockCases.find((c) => c.id === activeCase)?.name || "Trial Session";
+    await saveSession(caseName, {
+      caseId: activeCase,
+      activeTab: "strategy",
+    });
+    toast({ title: "Session saved", description: "You can continue this later." });
+  };
+
+  const handleExportPDF = () => {
+    const caseName = mockCases.find((c) => c.id === activeCase)?.name || "Trial Session";
+    exportToPDFText(
+      [
+        {
+          title: "Case Strategy",
+          content:
+            "Based on the uploaded documents, the strongest approach centers on establishing breach of contract through the defendant's failure to meet agreed delivery timelines (Clause 4.2). Supporting evidence includes email correspondence from March 2026 and the project milestone report. Consider emphasizing the liquidated damages clause and the defendant's prior acknowledgment of delays.",
+        },
+        {
+          title: "Relevant Precedents",
+          content: `
+            <p><strong>Stabilini Visinoni Ltd v. Mallinson & Partners (2014)</strong><br/>
+            Supreme Court established that delay penalties in commercial contracts are enforceable when the agreed amount represents a genuine pre-estimate of loss.</p>
+            <p><strong>AG Lagos v. Eko Hotels (2006)</strong><br/>
+            Court of Appeal held that contractual timelines constitute fundamental terms where time is expressed as being of the essence.</p>`,
+        },
+      ],
+      `Trial_Prep_${caseName.replace(/\s+/g, "_")}`
+    );
+  };
+
+  const openCase = (id: number) => {
+    setActiveCase(id);
+    logActivity("trial_prep_opened", mockCases.find((c) => c.id === id)?.name || "Trial Session");
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -19,10 +69,59 @@ export default function TrialPrep() {
           <h1 className="text-3xl font-heading">Trial Prep Studio</h1>
           <p className="text-muted-foreground mt-1">Multi-document analysis for case strategy and preparation.</p>
         </div>
-        <Button className="bg-gold text-ink hover:bg-gold/90 font-semibold gap-2">
-          <Plus className="h-4 w-4" /> New Session
-        </Button>
+        <div className="flex items-center gap-2">
+          {activeCase && (
+            <>
+              <Button variant="outline" size="sm" onClick={handleSaveSession} className="gap-1.5">
+                <Save className="h-4 w-4" /> Save
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-1.5">
+                    <Download className="h-4 w-4" /> Export
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={handleExportPDF}>Export as PDF</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          )}
+          <Button className="bg-gold text-ink hover:bg-gold/90 font-semibold gap-2">
+            <Plus className="h-4 w-4" /> New Session
+          </Button>
+        </div>
       </div>
+
+      {/* Saved sessions banner */}
+      {!activeCase && sessions.filter((s) => s.status === "in_progress").length > 0 && (
+        <Card className="shadow-card border-gold/20 bg-gold/5">
+          <CardContent className="p-4">
+            <p className="text-sm font-medium mb-2 flex items-center gap-2">
+              <Clock className="h-4 w-4 text-gold" /> Continue where you left off
+            </p>
+            {sessions
+              .filter((s) => s.status === "in_progress")
+              .slice(0, 3)
+              .map((s) => (
+                <div key={s.id} className="flex items-center gap-3 rounded-lg border p-3 mb-2 hover:bg-muted/50 transition-colors">
+                  <button onClick={() => setActiveCase(1)} className="flex items-center gap-3 flex-1 text-left">
+                    <Scale className="h-4 w-4 text-gold" />
+                    <div>
+                      <p className="text-sm font-medium">{s.title}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Last edited {new Date(s.updated_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </button>
+                  <Button variant="ghost" size="icon" onClick={() => deleteSession(s.id)}>
+                    <Trash2 className="h-4 w-4 text-muted-foreground" />
+                  </Button>
+                </div>
+              ))}
+          </CardContent>
+        </Card>
+      )}
 
       {!activeCase ? (
         <div className="space-y-4">
@@ -30,7 +129,7 @@ export default function TrialPrep() {
             <Card
               key={c.id}
               className="shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
-              onClick={() => setActiveCase(c.id)}
+              onClick={() => openCase(c.id)}
             >
               <CardContent className="flex items-center gap-4 p-5">
                 <div className="h-10 w-10 rounded-lg bg-gold/10 flex items-center justify-center">

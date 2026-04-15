@@ -3,7 +3,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Search, Filter, AlertTriangle, Clock, CheckCircle2, ExternalLink } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Search, Filter, AlertTriangle, Clock, CheckCircle2, ExternalLink, Download } from "lucide-react";
+import { exportToCSV, exportToPDFText } from "@/lib/export";
+import { useToast } from "@/hooks/use-toast";
 
 const bodies = ["All", "SEC", "CBN", "FIRS", "CAC", "NAICOM", "PENCOM", "NCC", "NERC", "FCCPC"];
 
@@ -27,6 +36,8 @@ const severityConfig = {
 export default function RegulatoryFeed() {
   const [search, setSearch] = useState("");
   const [activeBody, setActiveBody] = useState("All");
+  const [selectedAlerts, setSelectedAlerts] = useState<Set<number>>(new Set());
+  const { toast } = useToast();
 
   const filtered = alerts.filter((a) => {
     const matchesSearch = a.title.toLowerCase().includes(search.toLowerCase()) || a.summary.toLowerCase().includes(search.toLowerCase());
@@ -34,11 +45,72 @@ export default function RegulatoryFeed() {
     return matchesSearch && matchesBody;
   });
 
+  const toggleAlert = (id: number) => {
+    setSelectedAlerts((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleAll = () => {
+    if (selectedAlerts.size === filtered.length) {
+      setSelectedAlerts(new Set());
+    } else {
+      setSelectedAlerts(new Set(filtered.map((a) => a.id)));
+    }
+  };
+
+  const handleExportCSV = () => {
+    const items = selectedAlerts.size > 0
+      ? alerts.filter((a) => selectedAlerts.has(a.id))
+      : filtered;
+    exportToCSV(
+      items.map((a) => ({
+        Body: a.body,
+        Title: a.title,
+        Summary: a.summary,
+        Severity: a.severity,
+        Date: a.date,
+        Category: a.category,
+      })),
+      "Regulatory_Alerts"
+    );
+    toast({ title: "Exported", description: "CSV downloaded." });
+  };
+
+  const handleExportPDF = () => {
+    const items = selectedAlerts.size > 0
+      ? alerts.filter((a) => selectedAlerts.has(a.id))
+      : filtered;
+    exportToPDFText(
+      items.map((a) => ({
+        title: `[${a.body}] ${a.title} <span class="badge ${a.severity}">${a.severity.toUpperCase()}</span>`,
+        content: `<p>${a.summary}</p><p style="color:#6B7280;font-size:12px">${a.date} · ${a.category}</p>`,
+      })),
+      "Regulatory Feed Report"
+    );
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-3xl font-heading">Regulatory Feed</h1>
-        <p className="text-muted-foreground mt-1">Real-time alerts from Nigerian regulatory bodies.</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-heading">Regulatory Feed</h1>
+          <p className="text-muted-foreground mt-1">Real-time alerts from Nigerian regulatory bodies.</p>
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="gap-1.5">
+              <Download className="h-4 w-4" /> Export{selectedAlerts.size > 0 ? ` (${selectedAlerts.size})` : ""}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={handleExportPDF}>Export as PDF</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleExportCSV}>Export as CSV</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* Search & Filters */}
@@ -72,6 +144,17 @@ export default function RegulatoryFeed() {
         ))}
       </div>
 
+      {/* Select all */}
+      <div className="flex items-center gap-3">
+        <Checkbox
+          checked={filtered.length > 0 && selectedAlerts.size === filtered.length}
+          onCheckedChange={toggleAll}
+        />
+        <span className="text-sm text-muted-foreground">
+          {selectedAlerts.size > 0 ? `${selectedAlerts.size} selected` : "Select all"}
+        </span>
+      </div>
+
       {/* Alert cards */}
       <div className="space-y-4">
         {filtered.length === 0 && (
@@ -80,10 +163,16 @@ export default function RegulatoryFeed() {
         {filtered.map((alert) => {
           const sev = severityConfig[alert.severity as keyof typeof severityConfig];
           const Icon = sev.icon;
+          const isSelected = selectedAlerts.has(alert.id);
           return (
-            <Card key={alert.id} className="shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200">
+            <Card key={alert.id} className={`shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 ${isSelected ? "ring-2 ring-gold/40" : ""}`}>
               <CardContent className="p-5">
                 <div className="flex items-start gap-4">
+                  <Checkbox
+                    checked={isSelected}
+                    onCheckedChange={() => toggleAlert(alert.id)}
+                    className="mt-1"
+                  />
                   <div className={`h-10 w-10 rounded-lg ${sev.bg} flex items-center justify-center shrink-0 mt-0.5`}>
                     <Icon className={`h-5 w-5 ${sev.color}`} />
                   </div>
