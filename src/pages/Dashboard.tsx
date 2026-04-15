@@ -13,7 +13,10 @@ import {
   AlertTriangle,
   CheckCircle2,
   Clock,
+  History,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const stats = [
   { label: "Active Matters", value: "12", icon: FolderOpen, color: "text-gold" },
@@ -42,10 +45,33 @@ const severityIcon = {
   low: <CheckCircle2 className="h-4 w-4 text-risk-green" />,
 };
 
+interface Activity {
+  id: string;
+  action_type: string;
+  title: string;
+  created_at: string;
+  page_url: string | null;
+}
+
 export default function Dashboard() {
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+
+  const [recentActivity, setRecentActivity] = useState<Activity[]>([]);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("user_activity")
+      .select("id, action_type, title, created_at, page_url")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(5)
+      .then(({ data }) => {
+        if (data) setRecentActivity(data as Activity[]);
+      });
+  }, [user]);
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -126,6 +152,42 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Recent Activity */}
+      {recentActivity.length > 0 && (
+        <Card className="shadow-card">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <History className="h-5 w-5 text-gold" /> Recent Activity
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {recentActivity.map((a) => (
+              <div
+                key={a.id}
+                className="flex items-center gap-3 rounded-lg border p-3"
+              >
+                <div className="h-8 w-8 rounded-md bg-muted flex items-center justify-center">
+                  <History className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{a.title}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {a.action_type.replace(/_/g, " ")} · {new Date(a.created_at).toLocaleDateString()}
+                  </p>
+                </div>
+                {a.page_url && (
+                  <Link to={a.page_url}>
+                    <Button variant="ghost" size="sm" className="text-gold text-xs">
+                      View
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
