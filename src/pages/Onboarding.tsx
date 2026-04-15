@@ -26,6 +26,13 @@ const practiceAreas = [
   "Constitutional",
   "Real Estate",
   "Employment",
+  "Banking & Finance",
+  "Oil & Gas",
+  "Tax",
+  "Intellectual Property",
+  "Maritime/Admiralty",
+  "Telecommunications",
+  "Insurance",
   "General Practice",
 ];
 
@@ -39,12 +46,16 @@ const courts = [
   "National Industrial Court",
   "Magistrate Court",
   "Customary Court",
+  "Sharia Court",
+  "Tax Appeal Tribunal",
+  "Investment & Securities Tribunal",
   "Tribunal",
 ];
 
 const regulatoryBodies = [
   "CBN", "SEC", "FIRS", "NDPC", "CAC", "NAFDAC",
   "NITDA", "NCC", "NAICOM", "PENCOM", "NESREA", "FCCPC",
+  "AMCON", "NBA", "NERC", "BOFIA",
 ];
 
 export default function Onboarding() {
