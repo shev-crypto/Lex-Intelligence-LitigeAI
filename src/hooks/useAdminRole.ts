@@ -6,25 +6,22 @@ const SUPER_ADMIN_EMAIL = "shevowinda@gmail.com";
 
 export function useAdminRole() {
   const { user } = useAuth();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [state, setState] = useState<{ isAdmin: boolean; isSuperAdmin: boolean; loading: boolean }>({
+    isAdmin: false,
+    isSuperAdmin: false,
+    loading: true,
+  });
 
   useEffect(() => {
     if (!user) {
-      setIsAdmin(false);
-      setIsSuperAdmin(false);
-      setLoading(false);
+      setState({ isAdmin: false, isSuperAdmin: false, loading: false });
       return;
     }
 
-    // Super admin by email — always granted
     const superAdmin = user.email?.toLowerCase() === SUPER_ADMIN_EMAIL;
-    setIsSuperAdmin(superAdmin);
 
     if (superAdmin) {
-      setIsAdmin(true);
-      setLoading(false);
+      setState({ isAdmin: true, isSuperAdmin: true, loading: false });
       return;
     }
 
@@ -33,12 +30,11 @@ export function useAdminRole() {
         _user_id: user.id,
         _role: "admin",
       });
-      setIsAdmin(!!data);
-      setLoading(false);
+      setState({ isAdmin: !!data, isSuperAdmin: false, loading: false });
     };
 
     check();
   }, [user]);
 
-  return { isAdmin, isSuperAdmin, loading };
+  return state;
 }
