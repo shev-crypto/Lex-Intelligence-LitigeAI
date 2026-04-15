@@ -19,7 +19,6 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
-  demoLogin: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -102,13 +101,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (error) throw error;
   };
 
-  const demoLogin = async () => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email: "demo@litigeai.com",
-      password: "demo123456",
-    });
-    if (error) throw error;
-  };
 
   return (
     <AuthContext.Provider
@@ -121,7 +113,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signIn,
         signInWithGoogle,
         signOut,
-        demoLogin,
       }}
     >
       {children}

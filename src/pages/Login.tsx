@@ -13,7 +13,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signIn, signInWithGoogle, demoLogin } = useAuth();
+  const { signIn, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -41,17 +41,6 @@ export default function Login() {
     }
   };
 
-  const handleDemo = async () => {
-    setLoading(true);
-    try {
-      await demoLogin();
-      navigate("/dashboard");
-    } catch (error: any) {
-      toast({ title: "Demo login failed", description: error.message, variant: "destructive" });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-platinum px-4">
@@ -104,9 +93,6 @@ export default function Login() {
             </Button>
           </form>
 
-          <Button variant="outline" className="w-full" onClick={handleDemo} disabled={loading}>
-            Try Demo Account
-          </Button>
 
           <p className="text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
