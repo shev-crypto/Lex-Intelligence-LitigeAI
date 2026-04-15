@@ -30,7 +30,7 @@ export default function DocumentVault() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-heading">Document Vault</h1>

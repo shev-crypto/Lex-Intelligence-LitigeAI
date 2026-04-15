@@ -35,7 +35,7 @@ export default function RegulatoryFeed() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div>
         <h1 className="text-3xl font-heading">Regulatory Feed</h1>
         <p className="text-muted-foreground mt-1">Real-time alerts from Nigerian regulatory bodies.</p>
