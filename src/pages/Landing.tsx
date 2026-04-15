@@ -443,7 +443,7 @@ export default function Landing() {
                     </li>
                   ))}
                 </ul>
-                <Link to={plan.name === "Enterprise" ? "/waitlist" : "/signup"} className="block">
+                <Link to={plan.name === "Enterprise" ? "/waitlist" : (user ? "/pricing" : "/signup")} className="block">
                   <Button
                     className={`w-full ${
                       plan.highlighted
