@@ -405,9 +405,9 @@ export default function Pricing() {
           <p className="text-white/70 max-w-md mx-auto mb-8 font-body">
             Join Nigerian legal professionals already using LitigeAI to stay ahead.
           </p>
-          <Link to="/signup">
+          <Link to={user ? "#" : "/signup"} onClick={() => user && window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <Button size="lg" className="bg-gold text-ink hover:bg-gold/90 font-semibold text-base px-10 h-12">
-              Start Your Free Trial <ArrowRight className="ml-2 h-4 w-4" />
+              {user ? "Choose a Plan Above" : "Start Your Free Trial"} <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
         </div>

@@ -170,9 +170,9 @@ export default function Landing() {
                 </Button>
               </Link>
             )}
-            <Link to="/signup">
+            <Link to={user ? "/pricing" : "/signup"}>
               <Button className="bg-gold text-ink hover:bg-gold/90 font-semibold">
-                Start Free Trial
+                {user ? "Go to Dashboard" : "Start Free Trial"}
               </Button>
             </Link>
           </div>
@@ -205,9 +205,9 @@ export default function Landing() {
                   </Button>
                 </Link>
               )}
-              <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
+              <Link to={user ? "/pricing" : "/signup"} onClick={() => setMobileMenuOpen(false)}>
                 <Button className="w-full bg-gold text-ink hover:bg-gold/90 font-semibold">
-                  Start Free Trial
+                  {user ? "Go to Dashboard" : "Start Free Trial"}
                 </Button>
               </Link>
             </div>
@@ -240,12 +240,12 @@ export default function Landing() {
             </p>
 
             <div className="flex flex-wrap gap-4 pt-2">
-              <Link to="/signup">
+              <Link to={user ? "/pricing" : "/signup"}>
                 <Button
                   size="lg"
                   className="bg-gold text-ink hover:bg-gold/90 font-semibold text-base px-8 h-12"
                 >
-                  Start Free Trial
+                  {user ? "View Plans" : "Start Free Trial"}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
@@ -443,7 +443,7 @@ export default function Landing() {
                     </li>
                   ))}
                 </ul>
-                <Link to={plan.name === "Enterprise" ? "/waitlist" : "/signup"} className="block">
+                <Link to={plan.name === "Enterprise" ? "/waitlist" : (user ? "/pricing" : "/signup")} className="block">
                   <Button
                     className={`w-full ${
                       plan.highlighted
@@ -472,12 +472,12 @@ export default function Landing() {
               Join hundreds of Nigerian legal professionals already using LitigeAI
               to stay ahead of regulatory changes.
             </p>
-            <Link to="/signup">
+            <Link to={user ? "/pricing" : "/signup"}>
               <Button
                 size="lg"
                 className="bg-gold text-ink hover:bg-gold/90 font-semibold text-base px-10 h-12"
               >
-                Start Your Free Trial
+                {user ? "View Plans" : "Start Your Free Trial"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
