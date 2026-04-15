@@ -279,16 +279,16 @@ export default function Landing() {
       </section>
 
       {/* ─── Regulatory Bodies Strip ─── */}
-      <section className="border-y border-border bg-white">
+      <section className="border-y border-white/5 bg-white/[0.02]">
         <div className="container mx-auto px-6 py-8">
-          <p className="text-center text-xs uppercase tracking-widest text-steel mb-6">
+          <p className="text-center text-xs uppercase tracking-widest text-white/30 mb-6">
             Monitoring 20+ Nigerian Regulatory Bodies
           </p>
           <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
             {regulatoryBodies.map((body) => (
               <span
                 key={body}
-                className="text-sm font-semibold text-steel/40 hover:text-gold transition-colors tracking-wider"
+                className="text-sm font-semibold text-white/20 hover:text-gold/60 transition-colors tracking-wider"
               >
                 {body}
               </span>
@@ -298,58 +298,56 @@ export default function Landing() {
       </section>
 
       {/* ─── Features ─── */}
-      <section id="features" className="bg-white">
-        <div className="container mx-auto px-6 py-20 lg:py-28">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="font-heading text-3xl md:text-4xl text-ink mb-4">
-              Everything You Need to{" "}
-              <span className="text-gold">Stay Compliant</span>
-            </h2>
-            <p className="text-steel font-body">
-              Purpose-built tools for the Nigerian legal landscape, powered by AI
-              that understands local regulations.
-            </p>
-          </div>
+      <section id="features" className="container mx-auto px-6 py-20 lg:py-28">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <h2 className="font-heading text-3xl md:text-4xl text-white mb-4">
+            Everything You Need to{" "}
+            <span className="text-gold">Stay Compliant</span>
+          </h2>
+          <p className="text-white/50 font-body">
+            Purpose-built tools for the Nigerian legal landscape, powered by AI
+            that understands local regulations.
+          </p>
+        </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature) => (
-              <Card
-                key={feature.title}
-                className="bg-platinum border-border hover:border-gold/30 transition-all duration-300 group"
-              >
-                <CardContent className="p-6 space-y-4">
-                  <div className="h-10 w-10 rounded-lg bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                    <feature.icon className="h-5 w-5 text-gold" />
-                  </div>
-                  <h3 className="font-heading text-lg text-ink">{feature.title}</h3>
-                  <p className="text-sm text-steel leading-relaxed font-body">
-                    {feature.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {features.map((feature) => (
+            <Card
+              key={feature.title}
+              className="bg-white/[0.03] border-white/10 hover:border-gold/30 transition-all duration-300 group"
+            >
+              <CardContent className="p-6 space-y-4">
+                <div className="h-10 w-10 rounded-lg bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                  <feature.icon className="h-5 w-5 text-gold" />
+                </div>
+                <h3 className="font-heading text-lg text-white">{feature.title}</h3>
+                <p className="text-sm text-white/50 leading-relaxed font-body">
+                  {feature.description}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </section>
 
       {/* ─── Testimonials ─── */}
-      <section id="testimonials" className="border-y border-border bg-platinum">
+      <section id="testimonials" className="border-y border-white/5 bg-white/[0.02]">
         <div className="container mx-auto px-6 py-20 lg:py-28">
-          <h2 className="font-heading text-3xl md:text-4xl text-ink text-center mb-16">
+          <h2 className="font-heading text-3xl md:text-4xl text-white text-center mb-16">
             Trusted by <span className="text-gold">Legal Professionals</span>
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((t) => (
               <div
                 key={t.name}
-                className="rounded-xl border border-border bg-white p-6 space-y-4"
+                className="rounded-xl border border-white/10 bg-white/[0.03] p-6 space-y-4"
               >
-                <p className="text-steel text-sm leading-relaxed italic font-body">
+                <p className="text-white/60 text-sm leading-relaxed italic font-body">
                   "{t.quote}"
                 </p>
                 <div>
-                  <p className="text-ink font-semibold text-sm">{t.name}</p>
-                  <p className="text-steel text-xs">{t.role}</p>
+                  <p className="text-white font-semibold text-sm">{t.name}</p>
+                  <p className="text-white/40 text-xs">{t.role}</p>
                 </div>
               </div>
             ))}
