@@ -240,15 +240,15 @@ export default function Landing() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link to="/login">
+              <a href="#features">
                 <Button
                   size="lg"
                   variant="outline"
                   className="border-white/30 text-white bg-transparent hover:bg-white/10 hover:text-white hover:border-white/50 text-base px-8 h-12"
                 >
-                  View Live Demo
+                  See How It Works
                 </Button>
-              </Link>
+              </a>
             </div>
 
             {/* Trust bar */}
