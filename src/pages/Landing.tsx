@@ -142,6 +142,7 @@ const testimonials = [
 
 export default function Landing() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-ink text-foreground">
@@ -162,11 +163,13 @@ export default function Landing() {
           </nav>
           <div className="hidden md:flex items-center gap-3">
             <AdminButton variant="link" />
-            <Link to="/login">
-              <Button variant="ghost" className="text-white/80 hover:text-gold hover:bg-white/5">
-                Login
-              </Button>
-            </Link>
+            {!user && (
+              <Link to="/login">
+                <Button variant="ghost" className="text-white/80 hover:text-gold hover:bg-white/5">
+                  Login
+                </Button>
+              </Link>
+            )}
             <Link to="/signup">
               <Button className="bg-gold text-ink hover:bg-gold/90 font-semibold">
                 Start Free Trial
@@ -195,11 +198,13 @@ export default function Landing() {
             </a>
             <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
               <AdminButton variant="link" />
-              <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="outline" className="w-full border-white/20 bg-ink text-white hover:text-gold hover:bg-white/5">
-                  Login
-                </Button>
-              </Link>
+              {!user && (
+                <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="outline" className="w-full border-white/20 bg-ink text-white hover:text-gold hover:bg-white/5">
+                    Login
+                  </Button>
+                </Link>
+              )}
               <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
                 <Button className="w-full bg-gold text-ink hover:bg-gold/90 font-semibold">
                   Start Free Trial
