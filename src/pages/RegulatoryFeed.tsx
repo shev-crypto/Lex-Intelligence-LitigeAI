@@ -14,7 +14,7 @@ import { Search, Filter, AlertTriangle, Clock, CheckCircle2, ExternalLink, Downl
 import { exportToCSV, exportToPDFText } from "@/lib/export";
 import { useToast } from "@/hooks/use-toast";
 
-const bodies = ["All", "SEC", "CBN", "FIRS", "CAC", "NAICOM", "PENCOM", "NCC", "NERC", "FCCPC"];
+const bodies = ["All", "SEC", "CBN", "FIRS", "CAC", "NAICOM", "PENCOM", "NCC", "NERC", "FCCPC", "NDPC", "AMCON", "NBA", "NITDA"];
 
 const alerts = [
   { id: 1, body: "SEC", title: "New Disclosure Requirements for Listed Companies", summary: "The Securities and Exchange Commission has issued new guidelines requiring listed companies to disclose ESG metrics in their annual reports effective Q3 2026.", severity: "high", date: "Apr 15, 2026", category: "Disclosure" },
