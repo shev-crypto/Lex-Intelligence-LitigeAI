@@ -13,7 +13,7 @@ export interface Plan {
   trial_prep_limit_monthly: number | null;
   storage_limit_gb: number | null;
   team_member_limit: number | null;
-  features: Record<string, unknown>;
+  features: unknown;
   is_active: boolean;
 }
 
