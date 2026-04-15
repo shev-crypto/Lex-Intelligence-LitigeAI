@@ -76,13 +76,12 @@ function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-          {/* Admin link (only visible to admins) */}
-          {!collapsed && (
-            <div className="px-3 mt-2">
-              <AdminButton variant="sidebar" />
-            </div>
-          )}
-        </SidebarGroup>
+        {/* Admin link (only visible to admins) */}
+        {!collapsed && (
+          <div className="px-3 mt-2">
+            <AdminButton variant="sidebar" />
+          </div>
+        )}
       </SidebarContent>
     </Sidebar>
   );
