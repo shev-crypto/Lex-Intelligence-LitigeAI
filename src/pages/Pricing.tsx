@@ -11,6 +11,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Check,
   ArrowRight,
   Zap,
@@ -19,8 +25,12 @@ import {
   User,
   Users,
   MessageSquare,
+  CreditCard,
+  Loader2,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const plans = [
   {
@@ -126,8 +136,11 @@ function formatNaira(amount: number) {
 
 export default function Pricing() {
   const [annual, setAnnual] = useState(false);
+  const [paymentModal, setPaymentModal] = useState<{ slug: string; name: string; price: number } | null>(null);
+  const [paymentLoading, setPaymentLoading] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleCTA = (slug: string) => {
     if (slug === "enterprise") {
@@ -136,9 +149,78 @@ export default function Pricing() {
     }
     if (!user) {
       navigate("/signup");
-    } else {
-      // TODO: open payment modal
-      navigate("/settings");
+      return;
+    }
+    const plan = plans.find((p) => p.slug === slug)!;
+    const price = annual ? plan.annualPrice : plan.monthlyPrice;
+    setPaymentModal({ slug, name: plan.name, price });
+  };
+
+  const handlePaystack = async () => {
+    if (!paymentModal) return;
+    setPaymentLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("paystack-initialize", {
+        body: { plan_slug: paymentModal.slug, billing_cycle: annual ? "annual" : "monthly" },
+      });
+      if (error) throw error;
+      if (data?.authorization_url) {
+        window.location.href = data.authorization_url;
+      } else {
+        throw new Error("No payment URL returned");
+      }
+    } catch (err: any) {
+      toast({ title: "Payment failed", description: err.message, variant: "destructive" });
+    } finally {
+      setPaymentLoading(false);
+    }
+  };
+
+  const handleFlutterwave = async () => {
+    if (!paymentModal) return;
+    setPaymentLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("flutterwave-initialize", {
+        body: { plan_slug: paymentModal.slug, billing_cycle: annual ? "annual" : "monthly" },
+      });
+      if (error) throw error;
+
+      // Load Flutterwave inline
+      const script = document.createElement("script");
+      script.src = "https://checkout.flutterwave.com/v3.js";
+      script.onload = () => {
+        // @ts-ignore
+        window.FlutterwaveCheckout({
+          public_key: data.public_key,
+          tx_ref: data.tx_ref,
+          amount: data.amount,
+          currency: data.currency,
+          customer: data.customer,
+          customizations: data.customizations,
+          meta: data.meta,
+          callback: async (response: any) => {
+            // Verify payment
+            try {
+              await supabase.functions.invoke("flutterwave-verify", {
+                body: { transaction_id: response.transaction_id, tx_ref: data.tx_ref },
+              });
+              toast({ title: "Payment successful!", description: "Your subscription is now active." });
+              setPaymentModal(null);
+              navigate("/dashboard");
+            } catch {
+              toast({ title: "Verification failed", description: "Please contact support.", variant: "destructive" });
+            }
+          },
+          onclose: () => {
+            setPaymentLoading(false);
+          },
+        });
+      };
+      document.head.appendChild(script);
+    } catch (err: any) {
+      toast({ title: "Payment failed", description: err.message, variant: "destructive" });
+    } finally {
+      setPaymentLoading(false);
     }
   };
 
@@ -330,6 +412,58 @@ export default function Pricing() {
           </Link>
         </div>
       </section>
+
+      {/* Payment Gateway Modal */}
+      <Dialog open={!!paymentModal} onOpenChange={() => setPaymentModal(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Choose Payment Method</DialogTitle>
+          </DialogHeader>
+          {paymentModal && (
+            <div className="space-y-4 pt-2">
+              <div className="rounded-lg border p-4 bg-muted/50">
+                <p className="font-semibold">{paymentModal.name} Plan</p>
+                <p className="text-sm text-muted-foreground">
+                  {formatNaira(paymentModal.price)} / {annual ? "year" : "month"}
+                </p>
+              </div>
+
+              <Button
+                className="w-full bg-[#00C3F7] text-white hover:bg-[#00C3F7]/90 font-semibold h-12"
+                onClick={handlePaystack}
+                disabled={paymentLoading}
+              >
+                {paymentLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                ) : (
+                  <CreditCard className="h-4 w-4 mr-2" />
+                )}
+                Pay with Paystack
+                <span className="ml-auto text-xs opacity-75">NGN cards, bank transfer</span>
+              </Button>
+
+              <Button
+                variant="outline"
+                className="w-full h-12 font-semibold border-[#F5A623] text-[#F5A623] hover:bg-[#F5A623]/10"
+                onClick={handleFlutterwave}
+                disabled={paymentLoading}
+              >
+                {paymentLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                ) : (
+                  <CreditCard className="h-4 w-4 mr-2" />
+                )}
+                Pay with Flutterwave
+                <span className="ml-auto text-xs opacity-75">Cards, mobile money</span>
+              </Button>
+
+              <p className="text-xs text-center text-muted-foreground">
+                Your payment is processed securely. Cancel anytime.
+              </p>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
