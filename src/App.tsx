@@ -3,8 +3,21 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { Layout } from "@/components/layout/Layout";
+
+import Landing from "./pages/Landing";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
+import RegulatoryFeed from "./pages/RegulatoryFeed";
+import ContractAuditor from "./pages/ContractAuditor";
+import DocumentVault from "./pages/DocumentVault";
+import MatterDetail from "./pages/MatterDetail";
+import TrialPrep from "./pages/TrialPrep";
+import SettingsPage from "./pages/SettingsPage";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -14,11 +27,74 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<Landing />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+
+            {/* Protected routes with Layout */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Layout><Dashboard /></Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/regulatory-feed"
+              element={
+                <ProtectedRoute>
+                  <Layout><RegulatoryFeed /></Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/contract-auditor"
+              element={
+                <ProtectedRoute>
+                  <Layout><ContractAuditor /></Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/document-vault"
+              element={
+                <ProtectedRoute>
+                  <Layout><DocumentVault /></Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/document-vault/:id"
+              element={
+                <ProtectedRoute>
+                  <Layout><MatterDetail /></Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trial-prep"
+              element={
+                <ProtectedRoute>
+                  <Layout><TrialPrep /></Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <Layout><SettingsPage /></Layout>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
