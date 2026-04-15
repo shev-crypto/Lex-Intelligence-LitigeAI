@@ -186,7 +186,7 @@ export default function Landing() {
               Platform
             </h1>
 
-            <p className="text-lg text-white/60 max-w-lg font-body leading-relaxed">
+            <p className="text-lg text-white/80 max-w-lg font-body leading-relaxed">
               Real-time regulatory monitoring, AI contract auditing, and trial
               preparation — built for African legal professionals competing
               globally.
@@ -214,7 +214,7 @@ export default function Landing() {
             </div>
 
             {/* Trust bar */}
-            <div className="flex items-center gap-6 pt-4 text-sm text-white/40">
+            <div className="flex items-center gap-6 pt-4 text-sm text-white/70">
               <span className="flex items-center gap-1.5">
                 <Check className="h-4 w-4 text-risk-green" /> 14-day free trial
               </span>
@@ -281,14 +281,14 @@ export default function Landing() {
       {/* ─── Regulatory Bodies Strip ─── */}
       <section className="border-y border-white/5 bg-white/[0.02]">
         <div className="container mx-auto px-6 py-8">
-          <p className="text-center text-xs uppercase tracking-widest text-white/30 mb-6">
+          <p className="text-center text-xs uppercase tracking-widest text-white/80 mb-6">
             Monitoring 20+ Nigerian Regulatory Bodies
           </p>
           <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
             {regulatoryBodies.map((body) => (
               <span
                 key={body}
-                className="text-sm font-semibold text-white/20 hover:text-gold/60 transition-colors tracking-wider"
+                className="text-sm font-semibold text-white/80 hover:text-gold/60 transition-colors tracking-wider"
               >
                 {body}
               </span>
@@ -304,7 +304,7 @@ export default function Landing() {
             Everything You Need to{" "}
             <span className="text-gold">Stay Compliant</span>
           </h2>
-          <p className="text-white/50 font-body">
+          <p className="text-white/75 font-body">
             Purpose-built tools for the Nigerian legal landscape, powered by AI
             that understands local regulations.
           </p>
@@ -321,7 +321,7 @@ export default function Landing() {
                   <feature.icon className="h-5 w-5 text-gold" />
                 </div>
                 <h3 className="font-heading text-lg text-white">{feature.title}</h3>
-                <p className="text-sm text-white/50 leading-relaxed font-body">
+                <p className="text-sm text-white/75 leading-relaxed font-body">
                   {feature.description}
                 </p>
               </CardContent>
@@ -342,12 +342,12 @@ export default function Landing() {
                 key={t.name}
                 className="rounded-xl border border-white/10 bg-white/[0.03] p-6 space-y-4"
               >
-                <p className="text-white/60 text-sm leading-relaxed italic font-body">
+                <p className="text-white/80 text-sm leading-relaxed italic font-body">
                   "{t.quote}"
                 </p>
                 <div>
                   <p className="text-white font-semibold text-sm">{t.name}</p>
-                  <p className="text-white/40 text-xs">{t.role}</p>
+                  <p className="text-white/70 text-xs">{t.role}</p>
                 </div>
               </div>
             ))}
@@ -361,7 +361,7 @@ export default function Landing() {
           <h2 className="font-heading text-3xl md:text-4xl text-white mb-4">
             Simple, <span className="text-gold">Transparent Pricing</span>
           </h2>
-          <p className="text-white/50 font-body">
+          <p className="text-white/75 font-body">
             Start free for 14 days. No credit card required.
           </p>
         </div>
@@ -382,15 +382,15 @@ export default function Landing() {
               <CardContent className="p-6 space-y-6">
                 <div>
                   <h3 className="font-heading text-xl text-white">{plan.name}</h3>
-                  <p className="text-xs text-white/40 mt-1 font-body">{plan.description}</p>
+                  <p className="text-xs text-white/70 mt-1 font-body">{plan.description}</p>
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-3xl font-bold text-white">{plan.price}</span>
-                  <span className="text-white/40 text-sm">{plan.period}</span>
+                  <span className="text-white/70 text-sm">{plan.period}</span>
                 </div>
                 <ul className="space-y-3">
                   {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-white/60">
+                    <li key={f} className="flex items-start gap-2 text-sm text-white/80">
                       <Check className="h-4 w-4 text-gold mt-0.5 shrink-0" />
                       {f}
                     </li>
@@ -421,7 +421,7 @@ export default function Landing() {
             <h2 className="font-heading text-3xl md:text-4xl text-white mb-4">
               Ready to Transform Your Legal Practice?
             </h2>
-            <p className="text-white/50 max-w-lg mx-auto mb-8 font-body">
+            <p className="text-white/75 max-w-lg mx-auto mb-8 font-body">
               Join hundreds of Nigerian legal professionals already using LitigeAI
               to stay ahead of regulatory changes.
             </p>
@@ -444,7 +444,7 @@ export default function Landing() {
           <div className="grid md:grid-cols-4 gap-8">
             <div className="space-y-4">
               <span className="font-heading text-xl text-gold">LitigeAI</span>
-              <p className="text-xs text-white/40 leading-relaxed font-body">
+              <p className="text-xs text-white/70 leading-relaxed font-body">
                 AI-powered legal compliance platform built for Nigerian and
                 African legal professionals.
               </p>
@@ -468,7 +468,7 @@ export default function Landing() {
                 <ul className="space-y-2">
                   {col.links.map((link) => (
                     <li key={link}>
-                      <span className="text-xs text-white/30 hover:text-gold cursor-pointer transition-colors">
+                      <span className="text-xs text-white/80 hover:text-gold cursor-pointer transition-colors">
                         {link}
                       </span>
                     </li>
@@ -478,10 +478,10 @@ export default function Landing() {
             ))}
           </div>
           <div className="border-t border-white/5 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-white/30">
+            <p className="text-xs text-white/80">
               © {new Date().getFullYear()} LitigeAI. All rights reserved.
             </p>
-            <p className="text-xs text-white/20">Built in Lagos 🇳🇬</p>
+            <p className="text-xs text-white/80">Built in Lagos 🇳🇬</p>
           </div>
         </div>
       </footer>
