@@ -12,6 +12,7 @@ import {
 import { Upload, FileText, AlertTriangle, CheckCircle2, Clock, Shield, Download, Save } from "lucide-react";
 import { useActivityLog } from "@/hooks/useActivityLog";
 import { useSavedSessions } from "@/hooks/useSavedSessions";
+import { useFileUpload } from "@/hooks/useFileUpload";
 import { exportToCSV, exportToPDFText } from "@/lib/export";
 import { useToast } from "@/hooks/use-toast";
 
@@ -37,13 +38,16 @@ export default function ContractAuditor() {
   const { logActivity } = useActivityLog();
   const { sessions, saveSession } = useSavedSessions("contract_audit");
   const { toast } = useToast();
+  const { uploading: fileUploading, pickAndUpload, uploadedFiles } = useFileUpload();
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
+    const files = await pickAndUpload(".pdf,.docx,.doc,.txt");
+    if (files.length === 0) return;
     setAnalyzing(true);
     setTimeout(() => {
       setAnalyzing(false);
       setUploaded(true);
-      logActivity("contract_audit", "Contract Audit Completed", "Analyzed Service_Agreement_TechCorp_2026.pdf", {
+      logActivity("contract_audit", "Contract Audit Completed", `Analyzed ${files[0]?.name || "document"}`, {
         clauses_flagged: mockResults.length,
         high_risk: mockResults.filter((r) => r.risk === "high").length,
       });
@@ -160,9 +164,9 @@ export default function ContractAuditor() {
           <CardContent className="p-8">
             <div
               className="border-2 border-dashed border-muted-foreground/25 rounded-xl p-12 text-center cursor-pointer hover:border-gold/50 transition-colors"
-              onClick={handleUpload}
+              onClick={!analyzing && !fileUploading ? handleUpload : undefined}
             >
-              {analyzing ? (
+              {analyzing || fileUploading ? (
                 <div className="space-y-4">
                   <div className="h-12 w-12 mx-auto rounded-full bg-gold/10 flex items-center justify-center animate-pulse">
                     <Shield className="h-6 w-6 text-gold" />
