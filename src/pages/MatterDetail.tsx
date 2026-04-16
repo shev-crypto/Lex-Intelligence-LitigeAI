@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, FileText, Calendar, Plus, Clock, StickyNote } from "lucide-react";
+import { useFileUpload } from "@/hooks/useFileUpload";
 
 const matterData: Record<string, { title: string; client: string; type: string; status: string }> = {
   "1": { title: "TechCorp Ltd v. DataBridge Systems", client: "TechCorp Ltd", type: "Commercial Litigation", status: "active" },
@@ -30,6 +31,7 @@ const mockNotes = [
 export default function MatterDetail() {
   const { id } = useParams();
   const matter = matterData[id || ""] || { title: "Unknown Matter", client: "—", type: "—", status: "—" };
+  const { uploading, pickAndUpload, uploadedFiles } = useFileUpload();
 
   return (
     <div className="space-y-6">
@@ -59,10 +61,28 @@ export default function MatterDetail() {
 
         <TabsContent value="documents" className="space-y-4 mt-4">
           <div className="flex justify-end">
-            <Button className="bg-gold text-ink hover:bg-gold/90 font-semibold gap-2" size="sm">
-              <Plus className="h-4 w-4" /> Upload Document
+            <Button
+              className="bg-gold text-ink hover:bg-gold/90 font-semibold gap-2"
+              size="sm"
+              onClick={() => pickAndUpload()}
+              disabled={uploading}
+            >
+              <Plus className="h-4 w-4" /> {uploading ? "Uploading..." : "Upload Document"}
             </Button>
           </div>
+          {uploadedFiles.map((file) => (
+            <Card key={file.path} className="shadow-card border-gold/20">
+              <CardContent className="flex items-center gap-4 p-4">
+                <div className="h-9 w-9 rounded-lg bg-risk-green/10 flex items-center justify-center">
+                  <FileText className="h-4 w-4 text-risk-green" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium">{file.name}</p>
+                  <p className="text-xs text-muted-foreground">{(file.size / 1024 / 1024).toFixed(1)} MB · Just uploaded</p>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
           {mockDocs.map((doc) => (
             <Card key={doc.name} className="shadow-card">
               <CardContent className="flex items-center gap-4 p-4">
