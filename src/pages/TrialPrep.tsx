@@ -12,6 +12,7 @@ import {
 import { Upload, FileText, Scale, BookOpen, Lightbulb, Plus, Download, Save, Trash2, Clock } from "lucide-react";
 import { useActivityLog } from "@/hooks/useActivityLog";
 import { useSavedSessions } from "@/hooks/useSavedSessions";
+import { useFileUpload } from "@/hooks/useFileUpload";
 import { exportToPDFText } from "@/lib/export";
 import { useToast } from "@/hooks/use-toast";
 
@@ -25,6 +26,7 @@ export default function TrialPrep() {
   const { logActivity } = useActivityLog();
   const { sessions, saveSession, deleteSession } = useSavedSessions("trial_prep");
   const { toast } = useToast();
+  const { uploading, pickAndUpload, uploadedFiles } = useFileUpload();
 
   const handleSaveSession = async () => {
     const caseName = mockCases.find((c) => c.id === activeCase)?.name || "Trial Session";
@@ -151,9 +153,24 @@ export default function TrialPrep() {
               </div>
               <p className="text-sm font-medium">Start a new trial prep session</p>
               <p className="text-xs text-muted-foreground mt-1">Upload case files for AI analysis</p>
-              <Button className="mt-4 bg-gold text-ink hover:bg-gold/90 font-semibold">
-                <Upload className="mr-2 h-4 w-4" /> Upload Files
+              <Button
+                className="mt-4 bg-gold text-ink hover:bg-gold/90 font-semibold"
+                onClick={() => pickAndUpload()}
+                disabled={uploading}
+              >
+                <Upload className="mr-2 h-4 w-4" /> {uploading ? "Uploading..." : "Upload Files"}
               </Button>
+              {uploadedFiles.length > 0 && (
+                <div className="mt-4 space-y-1 text-left">
+                  {uploadedFiles.map((f) => (
+                    <div key={f.path} className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <FileText className="h-3 w-3" />
+                      <span>{f.name}</span>
+                      <span>({(f.size / 1024 / 1024).toFixed(1)} MB)</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
