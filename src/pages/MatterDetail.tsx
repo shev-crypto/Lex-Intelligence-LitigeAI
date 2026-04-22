@@ -43,6 +43,23 @@ export default function MatterDetail() {
   const { id } = useParams();
   const matter = matterData[id || ""] || { title: "Unknown Matter", client: "—", type: "—", status: "—" };
   const { uploading, pickAndUpload, uploadedFiles } = useFileUpload();
+  const { toast } = useToast();
+  const [notes, setNotes] = useState(mockNotes);
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [noteText, setNoteText] = useState("");
+
+  const addNote = () => {
+    if (!noteText.trim()) return;
+    setNotes((prev) => [{ text: noteText.trim(), date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }, ...prev]);
+    setNoteText("");
+    setNoteOpen(false);
+    toast({ title: "Note added" });
+  };
+
+  const viewDoc = (url: string, name: string) => {
+    if (!url) { toast({ title: "Preview unavailable", description: `${name} has no preview URL yet.` }); return; }
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div className="space-y-6">
