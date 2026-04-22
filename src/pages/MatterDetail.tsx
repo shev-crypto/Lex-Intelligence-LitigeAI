@@ -157,12 +157,31 @@ export default function MatterDetail() {
 
         <TabsContent value="notes" className="space-y-4 mt-4">
           <div className="flex justify-end">
-            <Button className="bg-gold text-ink hover:bg-gold/90 font-semibold gap-2" size="sm">
-              <Plus className="h-4 w-4" /> Add Note
-            </Button>
+            <Dialog open={noteOpen} onOpenChange={setNoteOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-gold text-ink hover:bg-gold/90 font-semibold gap-2" size="sm">
+                  <Plus className="h-4 w-4" /> Add Note
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add a note</DialogTitle>
+                </DialogHeader>
+                <Textarea
+                  placeholder="Write your note..."
+                  value={noteText}
+                  onChange={(e) => setNoteText(e.target.value)}
+                  rows={5}
+                />
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setNoteOpen(false)}>Cancel</Button>
+                  <Button onClick={addNote} className="bg-gold text-ink hover:bg-gold/90">Save Note</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
-          {mockNotes.map((note) => (
-            <Card key={note.date} className="shadow-card">
+          {notes.map((note, i) => (
+            <Card key={`${note.date}-${i}`} className="shadow-card">
               <CardContent className="flex items-start gap-4 p-4">
                 <div className="h-9 w-9 rounded-lg bg-muted flex items-center justify-center shrink-0">
                   <StickyNote className="h-4 w-4 text-muted-foreground" />
