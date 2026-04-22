@@ -198,7 +198,12 @@ export default function RegulatoryFeed() {
                       <Badge className={`${sev.bg} ${sev.color} border-0 shrink-0`}>{sev.label}</Badge>
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">{alert.summary}</p>
-                    <Button variant="ghost" size="sm" className="text-gold hover:text-gold/80 -ml-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-gold hover:text-gold/80 -ml-2"
+                      onClick={() => toast({ title: alert.title, description: alert.summary })}
+                    >
                       Read full notice <ExternalLink className="ml-1 h-3 w-3" />
                     </Button>
                   </div>
