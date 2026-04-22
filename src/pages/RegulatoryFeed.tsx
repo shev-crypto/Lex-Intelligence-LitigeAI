@@ -124,8 +124,17 @@ export default function RegulatoryFeed() {
             className="pl-9"
           />
         </div>
-        <Button variant="outline" size="default" className="gap-2">
-          <Filter className="h-4 w-4" /> Filters
+        <Button
+          variant="outline"
+          size="default"
+          className="gap-2"
+          onClick={() => {
+            setSearch("");
+            setActiveBody("All");
+            toast({ title: "Filters reset" });
+          }}
+        >
+          <Filter className="h-4 w-4" /> Reset Filters
         </Button>
       </div>
 
