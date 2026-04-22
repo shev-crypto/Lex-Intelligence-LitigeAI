@@ -5,6 +5,17 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, FileText, Calendar, Plus, Clock, StickyNote } from "lucide-react";
 import { useFileUpload } from "@/hooks/useFileUpload";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
 const matterData: Record<string, { title: string; client: string; type: string; status: string }> = {
   "1": { title: "TechCorp Ltd v. DataBridge Systems", client: "TechCorp Ltd", type: "Commercial Litigation", status: "active" },
@@ -32,6 +43,23 @@ export default function MatterDetail() {
   const { id } = useParams();
   const matter = matterData[id || ""] || { title: "Unknown Matter", client: "—", type: "—", status: "—" };
   const { uploading, pickAndUpload, uploadedFiles } = useFileUpload();
+  const { toast } = useToast();
+  const [notes, setNotes] = useState(mockNotes);
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [noteText, setNoteText] = useState("");
+
+  const addNote = () => {
+    if (!noteText.trim()) return;
+    setNotes((prev) => [{ text: noteText.trim(), date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }, ...prev]);
+    setNoteText("");
+    setNoteOpen(false);
+    toast({ title: "Note added" });
+  };
+
+  const viewDoc = (url: string, name: string) => {
+    if (!url) { toast({ title: "Preview unavailable", description: `${name} has no preview URL yet.` }); return; }
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div className="space-y-6">
@@ -80,6 +108,7 @@ export default function MatterDetail() {
                   <p className="text-sm font-medium">{file.name}</p>
                   <p className="text-xs text-muted-foreground">{(file.size / 1024 / 1024).toFixed(1)} MB · Just uploaded</p>
                 </div>
+                <Button variant="outline" size="sm" onClick={() => viewDoc(file.url, file.name)}>View</Button>
               </CardContent>
             </Card>
           ))}
@@ -93,7 +122,7 @@ export default function MatterDetail() {
                   <p className="text-sm font-medium">{doc.name}</p>
                   <p className="text-xs text-muted-foreground">{doc.size} · {doc.date}</p>
                 </div>
-                <Button variant="outline" size="sm">View</Button>
+                <Button variant="outline" size="sm" onClick={() => viewDoc("", doc.name)}>View</Button>
               </CardContent>
             </Card>
           ))}
@@ -128,12 +157,31 @@ export default function MatterDetail() {
 
         <TabsContent value="notes" className="space-y-4 mt-4">
           <div className="flex justify-end">
-            <Button className="bg-gold text-ink hover:bg-gold/90 font-semibold gap-2" size="sm">
-              <Plus className="h-4 w-4" /> Add Note
-            </Button>
+            <Dialog open={noteOpen} onOpenChange={setNoteOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-gold text-ink hover:bg-gold/90 font-semibold gap-2" size="sm">
+                  <Plus className="h-4 w-4" /> Add Note
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add a note</DialogTitle>
+                </DialogHeader>
+                <Textarea
+                  placeholder="Write your note..."
+                  value={noteText}
+                  onChange={(e) => setNoteText(e.target.value)}
+                  rows={5}
+                />
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setNoteOpen(false)}>Cancel</Button>
+                  <Button onClick={addNote} className="bg-gold text-ink hover:bg-gold/90">Save Note</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
-          {mockNotes.map((note) => (
-            <Card key={note.date} className="shadow-card">
+          {notes.map((note, i) => (
+            <Card key={`${note.date}-${i}`} className="shadow-card">
               <CardContent className="flex items-start gap-4 p-4">
                 <div className="h-9 w-9 rounded-lg bg-muted flex items-center justify-center shrink-0">
                   <StickyNote className="h-4 w-4 text-muted-foreground" />
