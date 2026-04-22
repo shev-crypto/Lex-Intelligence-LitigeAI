@@ -97,7 +97,10 @@ export default function DocumentVault() {
               </DropdownMenuContent>
             </DropdownMenu>
           )}
-          <Button className="bg-gold text-ink hover:bg-gold/90 font-semibold gap-2">
+          <Button
+            className="bg-gold text-ink hover:bg-gold/90 font-semibold gap-2"
+            onClick={() => toast({ title: "Create Matter", description: "Matter creation flow coming soon. Use Document Upload from any matter for now." })}
+          >
             <Plus className="h-4 w-4" /> New Matter
           </Button>
         </div>
