@@ -89,8 +89,12 @@ export default function TrialPrep() {
               </DropdownMenu>
             </>
           )}
-          <Button className="bg-gold text-ink hover:bg-gold/90 font-semibold gap-2">
-            <Plus className="h-4 w-4" /> New Session
+          <Button
+            className="bg-gold text-ink hover:bg-gold/90 font-semibold gap-2"
+            onClick={() => pickAndUpload()}
+            disabled={uploading}
+          >
+            <Plus className="h-4 w-4" /> {uploading ? "Uploading..." : "New Session"}
           </Button>
         </div>
       </div>
