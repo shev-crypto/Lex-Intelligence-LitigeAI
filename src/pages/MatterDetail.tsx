@@ -108,6 +108,7 @@ export default function MatterDetail() {
                   <p className="text-sm font-medium">{file.name}</p>
                   <p className="text-xs text-muted-foreground">{(file.size / 1024 / 1024).toFixed(1)} MB · Just uploaded</p>
                 </div>
+                <Button variant="outline" size="sm" onClick={() => viewDoc(file.url, file.name)}>View</Button>
               </CardContent>
             </Card>
           ))}
@@ -121,7 +122,7 @@ export default function MatterDetail() {
                   <p className="text-sm font-medium">{doc.name}</p>
                   <p className="text-xs text-muted-foreground">{doc.size} · {doc.date}</p>
                 </div>
-                <Button variant="outline" size="sm">View</Button>
+                <Button variant="outline" size="sm" onClick={() => viewDoc("", doc.name)}>View</Button>
               </CardContent>
             </Card>
           ))}
